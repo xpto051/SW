@@ -24,6 +24,7 @@ namespace GEP.Controllers
         }
 
         [HttpGet]
+        //[Route("[getRoute]")]
         public IEnumerable<WeatherForecast> Get()
         {
             var rng = new Random();

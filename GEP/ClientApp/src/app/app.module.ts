@@ -14,12 +14,16 @@ import {
 } from "@angular/material";
 
 import { AppComponent } from "./app.component";
-import { NavMenuComponent } from "./nav-menu/nav-menu.component";
-import { HomeComponent } from "./home/home.component";
-import { CounterComponent } from "./counter/counter.component";
-import { FetchDataComponent } from "./fetch-data/fetch-data.component";
+import { NavMenuComponent } from "./main/nav-menu/nav-menu.component";
+import { HomeComponent } from "./main/home/home.component";
+import { CounterComponent } from "./main/counter/counter.component";
+import { FetchDataComponent } from "./main/fetch-data/fetch-data.component";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { RegisterUserComponent } from "./register-user/register-user.component";
+import { LoginComponent } from "./login/login.component";
+import { MainComponent } from "./main/main.component";
+import { ToastrModule } from "ngx-toastr";
+import { AuthGuard } from "./auth/auth.guard";
+import { AuthInterceptor } from "./auth/auth.interceptor";
 
 @NgModule({
   declarations: [
@@ -28,7 +32,8 @@ import { RegisterUserComponent } from "./register-user/register-user.component";
     HomeComponent,
     CounterComponent,
     FetchDataComponent,
-    RegisterUserComponent,
+    LoginComponent,
+    MainComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: "ng-cli-universal" }),
@@ -41,15 +46,33 @@ import { RegisterUserComponent } from "./register-user/register-user.component";
     MatButtonModule,
     MatCheckboxModule,
     MatIconModule,
-    RouterModule.forRoot([
-      { path: "", component: HomeComponent, pathMatch: "full" },
-      { path: "counter", component: CounterComponent },
-      { path: "fetch-data", component: FetchDataComponent },
-      { path: "login", component: RegisterUserComponent },
-    ]),
     BrowserAnimationsModule,
+    ToastrModule.forRoot({
+      positionClass: "toast-top-right",
+      preventDuplicates: true,
+    }),
+    RouterModule.forRoot([
+      { path: "", redirectTo: "/login", pathMatch: "full" },
+      { path: "login", component: LoginComponent },
+      {
+        path: "gep",
+        component: MainComponent,
+        canActivate: [AuthGuard],
+        children: [
+          { path: "home", component: HomeComponent },
+          { path: "counter", component: CounterComponent },
+          { path: "fetch-data", component: FetchDataComponent },
+        ],
+      },
+    ]),
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true,
+    },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

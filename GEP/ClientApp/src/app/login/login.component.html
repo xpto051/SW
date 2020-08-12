@@ -1,0 +1,52 @@
+<img class="back-img" src="../../assets/img/login-img.png" />
+<div class="container-wrapper">
+  <div class="login-container">
+    <form #form="ngForm" autocomplete="off" (submit)="onSubmit(form)">
+      <h2>Bem-vindo</h2>
+      <div class="input-div one">
+        <div class="i">
+          <mat-icon>person</mat-icon>
+        </div>
+        <div class="form-group">
+          <input
+            #Email="ngModel"
+            class="form-control input"
+            name="Email"
+            [(ngModel)]="formModel.Email"
+            required
+          />
+          <label class="label-name">
+            <span class="content-name">Email</span>
+          </label>
+        </div>
+      </div>
+      <div class="input-div two">
+        <div class="i">
+          <mat-icon>lock</mat-icon>
+        </div>
+        <div class="form-group">
+          <input
+            type="password"
+            class="form-control input"
+            #Password="ngModel"
+            name="Password"
+            [(ngModel)]="formModel.Password"
+            required
+          />
+          <label class="label-name">
+            <span class="content-name">Password</span>
+          </label>
+        </div>
+      </div>
+
+      <a href="#">Forgot password?</a>
+      <input type="submit" class="btn" value="Login" />
+    </form>
+  </div>
+</div>
+
+<!-- <div class="form-row">
+        <div class="form-group col-md-8 offset-md-2">
+          <button type="submit">Login</button>
+        </div>
+      </div>-->

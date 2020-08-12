@@ -3,7 +3,7 @@
     class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3"
   >
     <div class="container">
-      <a class="navbar-brand" [routerLink]="['/']">GEP</a>
+      <a class="navbar-brand" [routerLink]="['/gep/home']">GEP</a>
       <button
         class="navbar-toggler"
         type="button"
@@ -25,17 +25,22 @@
             [routerLinkActive]="['link-active']"
             [routerLinkActiveOptions]="{ exact: true }"
           >
-            <a class="nav-link text-dark" [routerLink]="['/']">Home</a>
+            <a class="nav-link text-dark" [routerLink]="['/gep/home']">Home</a>
           </li>
           <li class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link text-dark" [routerLink]="['/counter']"
+            <a class="nav-link text-dark" [routerLink]="['/gep/counter']"
               >Counter</a
             >
           </li>
           <li class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link text-dark" [routerLink]="['/fetch-data']"
+            <a class="nav-link text-dark" [routerLink]="['/gep/fetch-data']"
               >Fetch data</a
             >
+          </li>
+          <li>
+            <button class="btn btn-danger my-2 my-sm-0" (click)="onLogout()">
+              Logout
+            </button>
           </li>
         </ul>
       </div>
