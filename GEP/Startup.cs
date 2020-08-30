@@ -17,6 +17,8 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using GEP.Helpers;
+using GEP.Models.Roles;
+using System.Threading.Tasks;
 
 namespace GEP
 {
@@ -45,7 +47,7 @@ namespace GEP
                 options.Password.RequireNonAlphanumeric = false;
                 options.User.AllowedUserNameCharacters = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 -._@+";
                 options.User.RequireUniqueEmail = true;
-            }).AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
+            }).AddRoleManager<RoleManager<IdentityRole>>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddMvc(option => option.EnableEndpointRouting = false);
@@ -83,7 +85,7 @@ namespace GEP
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider)
         {
             if (env.IsDevelopment())
             {
@@ -133,6 +135,45 @@ namespace GEP
                     spa.UseAngularCliServer(npmScript: "start");
                 }
             });
+
+            CreateRoles(serviceProvider).Wait();
+        }
+
+        /// <summary>
+        /// Cria os roles caso não existam
+        /// </summary>
+        /// <param name="roleManager"></param>
+        public async static Task CreateRoles(IServiceProvider serviceProvider)
+        {
+            RoleManager<IdentityRole> roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+            if (!await roleManager.RoleExistsAsync("Admin"))
+            {
+                IdentityRole adminRole = new AdminRole();
+                await roleManager.CreateAsync(adminRole);
+            }
+
+            if (!await roleManager.RoleExistsAsync("Coordenador"))
+            {
+                IdentityRole coordenadorRole = new CoordenadorRole();
+                await roleManager.CreateAsync(coordenadorRole);
+            }
+            if (!await roleManager.RoleExistsAsync("Docente"))
+            {
+                IdentityRole docenteRole = new DocenteRole();
+                await roleManager.CreateAsync(docenteRole);
+            }
+            if (!await roleManager.RoleExistsAsync("Estudante"))
+            {
+                IdentityRole estudanteRole = new EstudanteRole();
+                await roleManager.CreateAsync(estudanteRole);
+            }
+
+            if (!await roleManager.RoleExistsAsync("ResponsavelEmpresa"))
+            {
+                IdentityRole responsavelEmpresaRole = new ResponsavelEmpresaRole();
+                await roleManager.CreateAsync(responsavelEmpresaRole);
+            }
         }
     }
 }
