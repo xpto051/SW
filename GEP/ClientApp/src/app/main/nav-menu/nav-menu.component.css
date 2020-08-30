@@ -40,6 +40,9 @@ ul.nav {
 section.ItemSection {
   color: #00171f;
 }
+section.ItemSection:focus {
+  outline: 0;
+}
 
 section.ItemSection:hover {
   cursor: pointer;

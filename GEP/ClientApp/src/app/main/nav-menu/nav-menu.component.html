@@ -52,16 +52,28 @@
 <header>
   <ul class="nav">
     <div class="LiItems">
-      <li>
-        <section class="ItemSection">
+      <li [routerLinkActive]="['link-active']">
+        <section class="ItemSection" [routerLink]="['/gep/home']">
           DashBoard
         </section>
       </li>
       <div class="Separator"></div>
-      <li>
-        <section class="ItemSection">
-          segunda
+      <li [routerLinkActive]="['link-active']">
+        <section class="ItemSection" [routerLink]="['/gep/counter']">
+          Counter
         </section>
+      </li>
+      <div class="Separator"></div>
+      <li [routerLinkActive]="['link-active']">
+        <section class="ItemSection" [routerLink]="['/gep/fetch-data']">
+          Fetch Data
+        </section>
+      </li>
+      <div class="Separator"></div>
+      <li>
+        <button class="btn btn-danger my-2 my-sm-0" (click)="onLogout()">
+          Logout
+        </button>
       </li>
     </div>
 
