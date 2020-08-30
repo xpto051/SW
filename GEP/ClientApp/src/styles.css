@@ -3,6 +3,11 @@
 /* Provide sufficient contrast against white background */
 a {
   color: #0366d6;
+  text-decoration: none;
+}
+
+ul {
+  list-style: none;
 }
 
 code {
@@ -21,6 +26,9 @@ body {
 }
 body {
   margin: 0;
+  padding: 0;
+  outline: 0;
+  box-sizing: border-box;
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
