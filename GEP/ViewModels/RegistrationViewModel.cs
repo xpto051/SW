@@ -23,5 +23,7 @@ namespace GEP.ViewModels
         [Required]
         [Display(Name = "Ultimo Nome")]
         public string LastName { get; set; }
+
+        public string Role { get; set; }
     }
 }

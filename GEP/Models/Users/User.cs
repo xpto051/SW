@@ -17,5 +17,6 @@ namespace GEP.Models
 
         [Display(Name = "Utilizador")]
         public string Name { get { return FirstName + " " + LastName; } }
+    
     }
 }
