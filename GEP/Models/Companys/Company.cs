@@ -12,7 +12,6 @@ namespace GEP.Models
     public class Company
      
     {
-     
         public string  Sigla { get; set; }
         [Key]
         public string CompanyName { get; set; }
