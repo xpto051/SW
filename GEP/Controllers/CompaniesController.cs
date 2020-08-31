@@ -30,7 +30,7 @@ namespace GEP.Controllers
 
         // GET: api/Companies/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Company>> GetCompany(string id)
+        public async Task<ActionResult<Company>> GetCompany(int id)
         {
             var company = await _context.Company.FindAsync(id);
 
@@ -46,13 +46,14 @@ namespace GEP.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCompany(string id, Company company)
+        public async Task<IActionResult> PutCompany(int id, Company company)
         {
-            if (id != company.CompanyName)
+            
+            if (id != company.id)
             {
                 return BadRequest();
             }
-
+            company.id = id;
             _context.Entry(company).State = EntityState.Modified;
 
             try
@@ -81,28 +82,14 @@ namespace GEP.Controllers
         public async Task<ActionResult<Company>> PostCompany(Company company)
         {
             _context.Company.Add(company);
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                if (CompanyExists(company.CompanyName))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetCompany", new { id = company.CompanyName }, company);
+            return CreatedAtAction("GetCompany", new { id = company.id }, company);
         }
 
         // DELETE: api/Companies/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Company>> DeleteCompany(string id)
+        public async Task<ActionResult<Company>> DeleteCompany(int id)
         {
             var company = await _context.Company.FindAsync(id);
             if (company == null)
@@ -116,9 +103,9 @@ namespace GEP.Controllers
             return company;
         }
 
-        private bool CompanyExists(string id)
+        private bool CompanyExists(int id)
         {
-            return _context.Company.Any(e => e.CompanyName == id);
+            return _context.Company.Any(e => e.id == id);
         }
     }
 }

@@ -38,8 +38,14 @@ namespace GEP.Migrations
 
             modelBuilder.Entity("GEP.Models.Company", b =>
                 {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
                     b.Property<string>("CompanyName")
-                        .HasColumnType("nvarchar(450)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Descrição")
                         .IsRequired()
@@ -48,7 +54,7 @@ namespace GEP.Migrations
                     b.Property<string>("Sigla")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("CompanyName");
+                    b.HasKey("id");
 
                     b.ToTable("Company");
                 });
