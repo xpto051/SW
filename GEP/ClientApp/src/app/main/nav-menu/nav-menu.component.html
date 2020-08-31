@@ -1,4 +1,4 @@
-<header>
+<!--<header>
   <nav
     class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3"
   >
@@ -46,4 +46,51 @@
       </div>
     </div>
   </nav>
+</header>
+-->
+
+<header>
+  <ul class="nav">
+    <div class="LiItems">
+      <li [routerLinkActive]="['link-active']">
+        <section class="ItemSection" [routerLink]="['/gep/home']">
+          DashBoard
+        </section>
+      </li>
+      <div class="Separator"></div>
+      <li [routerLinkActive]="['link-active']">
+        <section class="ItemSection" [routerLink]="['/gep/counter']">
+          Counter
+        </section>
+      </li>
+      <div class="Separator"></div>
+      <li [routerLinkActive]="['link-active']">
+        <section class="ItemSection" [routerLink]="['/gep/fetch-data']">
+          Fetch Data
+        </section>
+      </li>
+      <div class="Separator"></div>
+      <li>
+        <button class="btn btn-danger my-2 my-sm-0" (click)="onLogout()">
+          Logout
+        </button>
+      </li>
+    </div>
+
+    <aside>
+      <div class="Profile">
+        <div>
+          <strong>Joao Martins</strong>
+          <section>Profile</section>
+        </div>
+        <div class="Container">
+          <img
+            class="Img"
+            src="https://ucc.edu.gh/sites/default/files/default_images/img_avatar_0.png"
+            alt="avatar"
+          />
+        </div>
+      </div>
+    </aside>
+  </ul>
 </header>

@@ -36,7 +36,6 @@ export class LoginComponent implements OnInit {
       },
       (err) => {
         if (err.status == 400) {
-          console.log("chegou aqui");
           this.toastr.error(
             "O email ou a password não estão corretos.",
             "Authentication failed."
