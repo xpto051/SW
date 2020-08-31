@@ -6,13 +6,11 @@ using System.Threading.Tasks;
 
 namespace GEP.Models
 {
-    [Table("estudante")]
-    public class Student
+    [Table("coordenator")]
+    public class Coordenator
     {
         public int Id { get; set; }
-
         public long Number { get; set; }
-
         public string UserId { get; set; }
         public User User { get; set; }
     }

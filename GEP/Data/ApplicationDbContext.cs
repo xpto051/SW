@@ -16,6 +16,12 @@ namespace GEP.Data
         }
 
         public DbSet<Student> Students { get; set; }
+
+        public DbSet<Admin> Admins { get; set; }
+        public DbSet<CompanyResp> CompaniesResp { get; set; }
+        public DbSet<Professor> Professors { get; set; }
+        public DbSet<Coordenator> Coordenators{ get; set; }
+
         public DbSet<Company> Company { get; set; }
     }
 }
