@@ -16,5 +16,6 @@ namespace GEP.Data
         }
 
         public DbSet<Student> Students { get; set; }
+        public DbSet<Company> Company { get; set; }
     }
 }

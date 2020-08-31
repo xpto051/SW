@@ -45,7 +45,7 @@ namespace GEP.Controllers
             return await _userManager.Users.ToListAsync();
         }
 
-        // GET: api/User/5
+        // GET: api/User/5  
         [HttpGet("{id}", Name = "Get")]
         public string Get(int id)
         {
