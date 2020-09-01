@@ -12,49 +12,48 @@ namespace GEP.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CompaniesController : ControllerBase
+    public class TFCsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
 
-        public CompaniesController(ApplicationDbContext context)
+        public TFCsController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: api/Companies
+        // GET: api/TFCs
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Company>>> GetCompany()
+        public async Task<ActionResult<IEnumerable<TFC>>> GetTFCs()
         {
-            return await _context.Company.ToListAsync();
+            return await _context.TFCs.ToListAsync();
         }
 
-        // GET: api/Companies/5
+        // GET: api/TFCs/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Company>> GetCompany(int id)
+        public async Task<ActionResult<TFC>> GetTFC(int id)
         {
-            var company = await _context.Company.FindAsync(id);
+            var tFC = await _context.TFCs.FindAsync(id);
 
-            if (company == null)
+            if (tFC == null)
             {
                 return NotFound();
             }
 
-            return company;
+            return tFC;
         }
 
-        // PUT: api/Companies/5
+        // PUT: api/TFCs/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCompany(int id, Company company)
+        public async Task<IActionResult> PutTFC(int id, TFC tFC)
         {
-            
-            if (id != company.Id)
+            if (id != tFC.ID)
             {
                 return BadRequest();
             }
-            
-            _context.Entry(company).State = EntityState.Modified;
+
+            _context.Entry(tFC).State = EntityState.Modified;
 
             try
             {
@@ -62,7 +61,7 @@ namespace GEP.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!CompanyExists(id))
+                if (!TFCExists(id))
                 {
                     return NotFound();
                 }
@@ -75,37 +74,37 @@ namespace GEP.Controllers
             return NoContent();
         }
 
-        // POST: api/Companies
+        // POST: api/TFCs
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<Company>> PostCompany(Company company)
+        public async Task<ActionResult<TFC>> PostTFC(TFC tFC)
         {
-            _context.Company.Add(company);
+            _context.TFCs.Add(tFC);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetCompany", new { id = company.Id }, company);
+            return CreatedAtAction("GetTFC", new { id = tFC.ID }, tFC);
         }
 
-        // DELETE: api/Companies/5
+        // DELETE: api/TFCs/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Company>> DeleteCompany(int id)
+        public async Task<ActionResult<TFC>> DeleteTFC(int id)
         {
-            var company = await _context.Company.FindAsync(id);
-            if (company == null)
+            var tFC = await _context.TFCs.FindAsync(id);
+            if (tFC == null)
             {
                 return NotFound();
             }
 
-            _context.Company.Remove(company);
+            _context.TFCs.Remove(tFC);
             await _context.SaveChangesAsync();
 
-            return company;
+            return tFC;
         }
 
-        private bool CompanyExists(int id)
+        private bool TFCExists(int id)
         {
-            return _context.Company.Any(e => e.Id == id);
+            return _context.TFCs.Any(e => e.ID == id);
         }
     }
 }
