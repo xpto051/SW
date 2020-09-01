@@ -54,6 +54,9 @@ namespace GEP.Migrations
                     b.Property<string>("Sigla")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("URL")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.ToTable("Company");
@@ -378,7 +381,11 @@ namespace GEP.Migrations
                 {
                     b.HasBaseType("GEP.Models.TFC");
 
-                    b.Property<int>("CompanyId")
+                    b.Property<string>("CompanyId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("CompanyId1")
                         .HasColumnType("int");
 
                     b.Property<int>("CompanyRespId")
@@ -388,7 +395,7 @@ namespace GEP.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasIndex("CompanyId");
+                    b.HasIndex("CompanyId1");
 
                     b.HasIndex("CompanyRespId");
 
@@ -401,13 +408,8 @@ namespace GEP.Migrations
                 {
                     b.HasBaseType("GEP.Models.TFC");
 
-                    b.Property<int>("ProfessorID")
-                        .HasColumnType("int");
-
                     b.Property<string>("Theme")
                         .HasColumnType("nvarchar(max)");
-
-                    b.HasIndex("ProfessorID");
 
                     b.ToTable("trabalho_final");
 
@@ -510,22 +512,11 @@ namespace GEP.Migrations
                 {
                     b.HasOne("GEP.Models.Company", "Company")
                         .WithMany()
-                        .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CompanyId1");
 
                     b.HasOne("GEP.Models.CompanyResp", "CompanyResp")
                         .WithMany()
                         .HasForeignKey("CompanyRespId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("GEP.Models.Project", b =>
-                {
-                    b.HasOne("GEP.Models.Professor", "Professor")
-                        .WithMany()
-                        .HasForeignKey("ProfessorID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

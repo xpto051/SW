@@ -10,8 +10,6 @@ namespace GEP.Models
     public class Project : TFC
     {
         public string Theme { get; set; }
-        public int ProfessorID { get; set; }
-        public virtual Professor Professor { get; set; }
 
     }
 }

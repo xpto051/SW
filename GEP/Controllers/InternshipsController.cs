@@ -95,7 +95,7 @@ namespace GEP.Controllers
                 Description = model.Description,
                 Role = model.Role,
                 CompanyRespId = model.CompanyRespId,
-                CompanyResp = await _context.Professors.FindAsync(model.CompanyRespId)
+                CompanyResp = await _context.CompaniesResp.FindAsync(model.CompanyRespId)
             };
 
             _context.Internships.Add(i);

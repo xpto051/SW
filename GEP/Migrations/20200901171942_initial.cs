@@ -3,11 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace GEP.Migrations
 {
-<<<<<<< HEAD:GEP/Migrations/20200901162353_initial.cs
     public partial class initial : Migration
-=======
-    public partial class init : Migration
->>>>>>> 0ae5174bb693dad4feb8fc1a1a3712ec347890c3:GEP/Migrations/20200901151042_init.cs
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -60,7 +56,8 @@ namespace GEP.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Sigla = table.Column<string>(nullable: true),
                     CompanyName = table.Column<string>(nullable: false),
-                    Description = table.Column<string>(nullable: false)
+                    Description = table.Column<string>(nullable: false),
+                    URL = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -290,30 +287,24 @@ namespace GEP.Migrations
                     Description = table.Column<string>(nullable: false),
                     Discriminator = table.Column<string>(nullable: false),
                     Role = table.Column<string>(nullable: true),
-                    CompanyId = table.Column<int>(nullable: true),
+                    CompanyId = table.Column<string>(nullable: true),
+                    CompanyId1 = table.Column<int>(nullable: true),
                     CompanyRespId = table.Column<int>(nullable: true),
-                    Theme = table.Column<string>(nullable: true),
-                    ProfessorID = table.Column<int>(nullable: true)
+                    Theme = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_trabalho_final", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_trabalho_final_Company_CompanyId",
-                        column: x => x.CompanyId,
+                        name: "FK_trabalho_final_Company_CompanyId1",
+                        column: x => x.CompanyId1,
                         principalTable: "Company",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_trabalho_final_companyresp_CompanyRespId",
                         column: x => x.CompanyRespId,
                         principalTable: "companyresp",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_trabalho_final_professor_ProfessorID",
-                        column: x => x.ProfessorID,
-                        principalTable: "professor",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -388,19 +379,14 @@ namespace GEP.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_trabalho_final_CompanyId",
+                name: "IX_trabalho_final_CompanyId1",
                 table: "trabalho_final",
-                column: "CompanyId");
+                column: "CompanyId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_trabalho_final_CompanyRespId",
                 table: "trabalho_final",
                 column: "CompanyRespId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_trabalho_final_ProfessorID",
-                table: "trabalho_final",
-                column: "ProfessorID");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -424,14 +410,13 @@ namespace GEP.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-<<<<<<< HEAD:GEP/Migrations/20200901162353_initial.cs
-                name: "companyresp");
-=======
                 name: "coordenator");
 
             migrationBuilder.DropTable(
                 name: "estudante");
->>>>>>> 0ae5174bb693dad4feb8fc1a1a3712ec347890c3:GEP/Migrations/20200901151042_init.cs
+
+            migrationBuilder.DropTable(
+                name: "professor");
 
             migrationBuilder.DropTable(
                 name: "trabalho_final");
@@ -440,13 +425,7 @@ namespace GEP.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "Company");
-
-            migrationBuilder.DropTable(
                 name: "companyresp");
-
-            migrationBuilder.DropTable(
-                name: "professor");
 
             migrationBuilder.DropTable(
                 name: "Company");

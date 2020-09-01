@@ -10,13 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GEP.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-<<<<<<< HEAD:GEP/Migrations/20200901162353_initial.Designer.cs
-    [Migration("20200901162353_initial")]
+    [Migration("20200901171942_initial")]
     partial class initial
-=======
-    [Migration("20200901151042_init")]
-    partial class init
->>>>>>> 0ae5174bb693dad4feb8fc1a1a3712ec347890c3:GEP/Migrations/20200901151042_init.Designer.cs
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -59,6 +54,9 @@ namespace GEP.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Sigla")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("URL")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -385,7 +383,11 @@ namespace GEP.Migrations
                 {
                     b.HasBaseType("GEP.Models.TFC");
 
-                    b.Property<int>("CompanyId")
+                    b.Property<string>("CompanyId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("CompanyId1")
                         .HasColumnType("int");
 
                     b.Property<int>("CompanyRespId")
@@ -395,7 +397,7 @@ namespace GEP.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasIndex("CompanyId");
+                    b.HasIndex("CompanyId1");
 
                     b.HasIndex("CompanyRespId");
 
@@ -408,13 +410,8 @@ namespace GEP.Migrations
                 {
                     b.HasBaseType("GEP.Models.TFC");
 
-                    b.Property<int>("ProfessorID")
-                        .HasColumnType("int");
-
                     b.Property<string>("Theme")
                         .HasColumnType("nvarchar(max)");
-
-                    b.HasIndex("ProfessorID");
 
                     b.ToTable("trabalho_final");
 
@@ -517,22 +514,11 @@ namespace GEP.Migrations
                 {
                     b.HasOne("GEP.Models.Company", "Company")
                         .WithMany()
-                        .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CompanyId1");
 
                     b.HasOne("GEP.Models.CompanyResp", "CompanyResp")
                         .WithMany()
                         .HasForeignKey("CompanyRespId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("GEP.Models.Project", b =>
-                {
-                    b.HasOne("GEP.Models.Professor", "Professor")
-                        .WithMany()
-                        .HasForeignKey("ProfessorID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

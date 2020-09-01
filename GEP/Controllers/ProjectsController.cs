@@ -94,9 +94,7 @@ namespace GEP.Controllers
                 Proposta = true,
                 Aceite = false,
                 Description =model.Description,
-                Theme = model.Theme,
-                ProfessorID = model.ProfessorID,
-                Professor = await _context.Professors.FindAsync(model.ProfessorID)
+                Theme = model.Theme
             };
 
             _context.Projects.Add(p);
