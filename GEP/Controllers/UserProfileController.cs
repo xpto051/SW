@@ -33,5 +33,14 @@ namespace GEP.Controllers
                 user.Email
             };
         }
+
+        [HttpGet]
+        [Authorize(Roles = "Admin,Estudante")]
+        [Route("forAdmin")]
+
+        public string getForAdmin()
+        {
+            return "metodo do admin teste";
+        }
     }
 }

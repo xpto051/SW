@@ -60,7 +60,7 @@ namespace GEP.Controllers
             {
                 return BadRequest(ModelState);
             }
-            model.Role = "Admin";
+            model.Role = "Estudante";
             var userIdentity = _mapper.Map<User>(model);
             var result = await _userManager.CreateAsync(userIdentity, "12345678jJ");
             await _userManager.AddToRoleAsync(userIdentity, model.Role);
@@ -118,10 +118,15 @@ namespace GEP.Controllers
             var user = await _userManager.FindByEmailAsync(model.Email);
             if(user != null && await _userManager.CheckPasswordAsync(user, model.Password))
             {
+                //get role assigned to the user
+                var role = await _userManager.GetRolesAsync(user);
+                IdentityOptions _options = new IdentityOptions();
+
                 var tokenDescriptor = new SecurityTokenDescriptor
                 {
                     Subject = new ClaimsIdentity(new Claim[] {
-                        new Claim("UserID", user.Id.ToString())
+                        new Claim("UserID", user.Id.ToString()),
+                        new Claim(_options.ClaimsIdentity.RoleClaimType, role.FirstOrDefault())
                     }),
                     Expires = DateTime.UtcNow.AddDays(5),
                     SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_appSettings.JWT_SECRET)), SecurityAlgorithms.HmacSha256Signature)

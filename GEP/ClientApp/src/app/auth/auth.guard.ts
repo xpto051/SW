@@ -6,7 +6,6 @@ import {
   UrlTree,
   Router,
 } from "@angular/router";
-import { Observable } from "rxjs";
 
 @Injectable({
   providedIn: "root",
@@ -18,10 +17,36 @@ export class AuthGuard implements CanActivate {
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): boolean {
-    if (localStorage.getItem("token") != null) return true;
-    else {
+    if (localStorage.getItem("token") != null) {
+      let roles = next.data["permittedRoles"] as Array<string>;
+
+      if (roles) {
+        if (roleMatch(roles)) {
+          return true;
+        } else {
+          this.router.navigate(["/forbidden"]);
+          return false;
+        }
+      }
+      return true;
+    } else {
       this.router.navigate(["/login"]);
       return false;
     }
   }
+}
+
+function roleMatch(allowedRoles): boolean {
+  var isMatch = false;
+  var payload = JSON.parse(
+    window.atob(localStorage.getItem("token").split(".")[1])
+  );
+  var userRole = payload.role;
+  allowedRoles.forEach((elem) => {
+    if (userRole == elem) {
+      isMatch = true;
+      return false;
+    }
+  });
+  return isMatch;
 }

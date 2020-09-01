@@ -24,6 +24,8 @@ import { MainComponent } from "./main/main.component";
 import { ToastrModule } from "ngx-toastr";
 import { AuthGuard } from "./auth/auth.guard";
 import { AuthInterceptor } from "./auth/auth.interceptor";
+import { AddUserComponent } from "./main/add-user/add-user.component";
+import { ForbiddenComponent } from "./main/forbidden/forbidden.component";
 
 @NgModule({
   declarations: [
@@ -34,6 +36,8 @@ import { AuthInterceptor } from "./auth/auth.interceptor";
     FetchDataComponent,
     LoginComponent,
     MainComponent,
+    AddUserComponent,
+    ForbiddenComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: "ng-cli-universal" }),
@@ -54,6 +58,7 @@ import { AuthInterceptor } from "./auth/auth.interceptor";
     RouterModule.forRoot([
       { path: "", redirectTo: "/login", pathMatch: "full" },
       { path: "login", component: LoginComponent },
+      { path: "forbidden", component: ForbiddenComponent },
       {
         path: "gep",
         component: MainComponent,
@@ -62,6 +67,12 @@ import { AuthInterceptor } from "./auth/auth.interceptor";
           { path: "home", component: HomeComponent },
           { path: "counter", component: CounterComponent },
           { path: "fetch-data", component: FetchDataComponent },
+          {
+            path: "add-user",
+            component: AddUserComponent,
+            canActivate: [AuthGuard],
+            data: { permittedRoles: ["Admin"] },
+          },
         ],
       },
     ]),
