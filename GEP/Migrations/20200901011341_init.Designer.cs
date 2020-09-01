@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GEP.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200831020854_reset")]
-    partial class reset
+    [Migration("20200901011341_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -40,7 +40,7 @@ namespace GEP.Migrations
 
             modelBuilder.Entity("GEP.Models.Company", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -49,14 +49,14 @@ namespace GEP.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Descrição")
+                    b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Sigla")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("id");
+                    b.HasKey("Id");
 
                     b.ToTable("Company");
                 });
@@ -136,6 +136,33 @@ namespace GEP.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("estudante");
+                });
+
+            modelBuilder.Entity("GEP.Models.TFC", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("Aceite")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Proposta")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("vagas")
+                        .HasColumnType("int");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("trabalho_final");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("TFC");
                 });
 
             modelBuilder.Entity("GEP.Models.User", b =>
@@ -340,6 +367,50 @@ namespace GEP.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("GEP.Models.Internships", b =>
+                {
+                    b.HasBaseType("GEP.Models.TFC");
+
+                    b.Property<int>("CompanyId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CompanyRespId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasIndex("CompanyId");
+
+                    b.HasIndex("CompanyRespId");
+
+                    b.ToTable("trabalho_final");
+
+                    b.HasDiscriminator().HasValue("Internships");
+                });
+
+            modelBuilder.Entity("GEP.Models.Project", b =>
+                {
+                    b.HasBaseType("GEP.Models.TFC");
+
+                    b.Property<int>("ProfessorID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Theme")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasIndex("ProfessorID");
+
+                    b.ToTable("trabalho_final");
+
+                    b.HasDiscriminator().HasValue("Project");
+                });
+
             modelBuilder.Entity("GEP.Models.Admin", b =>
                 {
                     b.HasOne("GEP.Models.User", "User")
@@ -422,6 +493,30 @@ namespace GEP.Migrations
                     b.HasOne("GEP.Models.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("GEP.Models.Internships", b =>
+                {
+                    b.HasOne("GEP.Models.Company", "Company")
+                        .WithMany()
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("GEP.Models.CompanyResp", "CompanyResp")
+                        .WithMany()
+                        .HasForeignKey("CompanyRespId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("GEP.Models.Project", b =>
+                {
+                    b.HasOne("GEP.Models.Professor", "Professor")
+                        .WithMany()
+                        .HasForeignKey("ProfessorID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

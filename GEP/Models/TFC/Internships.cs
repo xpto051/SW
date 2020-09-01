@@ -6,21 +6,20 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace GEP.Models
-
 {
-    [Table("Company")]
-    public class Company
-     
+    
+    public class Internships : TFC
     {
-        [Key]
-        public int Id { get; set; }
-        public string  Sigla { get; set; }
+       
         [Required]
-        public string CompanyName { get; set; }
+        public string Role { get; set; }
+        [Required]
+        public Company Company { get; set; }
         [Required]
         public string Description { get; set; }
 
-        [Display(Name = "Empresa")]
-        public string SiglaName { get { return CompanyName + "-" + Sigla; } }
+        public int CompanyRespId { get; set; }
+        public virtual CompanyResp CompanyResp { get; set; }
+
     }
 }

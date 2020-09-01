@@ -40,11 +40,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="Migrations\20200804051421_user.cs" />
-    <Compile Remove="Migrations\20200804051421_user.Designer.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="Models\Roles\" />
   </ItemGroup>
 

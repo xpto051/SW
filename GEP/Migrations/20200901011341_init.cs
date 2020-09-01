@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace GEP.Migrations
 {
-    public partial class reset : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -52,15 +52,15 @@ namespace GEP.Migrations
                 name: "Company",
                 columns: table => new
                 {
-                    id = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Sigla = table.Column<string>(nullable: true),
                     CompanyName = table.Column<string>(nullable: false),
-                    Descrição = table.Column<string>(nullable: false)
+                    Description = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Company", x => x.id);
+                    table.PrimaryKey("PK_Company", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -267,6 +267,46 @@ namespace GEP.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "trabalho_final",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    vagas = table.Column<int>(nullable: false),
+                    Proposta = table.Column<bool>(nullable: false),
+                    Aceite = table.Column<bool>(nullable: false),
+                    Discriminator = table.Column<string>(nullable: false),
+                    Role = table.Column<string>(nullable: true),
+                    CompanyId = table.Column<int>(nullable: true),
+                    Description = table.Column<string>(nullable: true),
+                    CompanyRespId = table.Column<int>(nullable: true),
+                    Theme = table.Column<string>(nullable: true),
+                    ProfessorID = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_trabalho_final", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_trabalho_final_Company_CompanyId",
+                        column: x => x.CompanyId,
+                        principalTable: "Company",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_trabalho_final_companyresp_CompanyRespId",
+                        column: x => x.CompanyRespId,
+                        principalTable: "companyresp",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_trabalho_final_professor_ProfessorID",
+                        column: x => x.ProfessorID,
+                        principalTable: "professor",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_admin_UserId",
                 table: "admin",
@@ -330,6 +370,21 @@ namespace GEP.Migrations
                 name: "IX_professor_UserId",
                 table: "professor",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_trabalho_final_CompanyId",
+                table: "trabalho_final",
+                column: "CompanyId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_trabalho_final_CompanyRespId",
+                table: "trabalho_final",
+                column: "CompanyRespId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_trabalho_final_ProfessorID",
+                table: "trabalho_final",
+                column: "ProfessorID");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -353,22 +408,25 @@ namespace GEP.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Company");
-
-            migrationBuilder.DropTable(
-                name: "companyresp");
-
-            migrationBuilder.DropTable(
                 name: "coordenator");
 
             migrationBuilder.DropTable(
                 name: "estudante");
 
             migrationBuilder.DropTable(
-                name: "professor");
+                name: "trabalho_final");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "Company");
+
+            migrationBuilder.DropTable(
+                name: "companyresp");
+
+            migrationBuilder.DropTable(
+                name: "professor");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

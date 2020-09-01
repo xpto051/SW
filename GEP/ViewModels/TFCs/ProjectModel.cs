@@ -1,0 +1,17 @@
+﻿using GEP.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace GEP.ViewModels.TFCs
+{
+    public class ProjectModel
+    {
+        public int Vagas { get; set; }
+        public string Theme { get; set; }
+        public int ProfessorID { get; set; }
+       
+     
+    }
+}

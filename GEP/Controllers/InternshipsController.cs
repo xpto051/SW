@@ -12,49 +12,48 @@ namespace GEP.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CompaniesController : ControllerBase
+    public class InternshipsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
 
-        public CompaniesController(ApplicationDbContext context)
+        public InternshipsController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: api/Companies
+        // GET: api/Internships
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Company>>> GetCompany()
+        public async Task<ActionResult<IEnumerable<Internships>>> GetInternships()
         {
-            return await _context.Company.ToListAsync();
+            return await _context.Internships.ToListAsync();
         }
 
-        // GET: api/Companies/5
+        // GET: api/Internships/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Company>> GetCompany(int id)
+        public async Task<ActionResult<Internships>> GetInternships(int id)
         {
-            var company = await _context.Company.FindAsync(id);
+            var internships = await _context.Internships.FindAsync(id);
 
-            if (company == null)
+            if (internships == null)
             {
                 return NotFound();
             }
 
-            return company;
+            return internships;
         }
 
-        // PUT: api/Companies/5
+        // PUT: api/Internships/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCompany(int id, Company company)
+        public async Task<IActionResult> PutInternships(int id, Internships internships)
         {
-            
-            if (id != company.Id)
+            if (id != internships.ID)
             {
                 return BadRequest();
             }
-            
-            _context.Entry(company).State = EntityState.Modified;
+
+            _context.Entry(internships).State = EntityState.Modified;
 
             try
             {
@@ -62,7 +61,7 @@ namespace GEP.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!CompanyExists(id))
+                if (!InternshipsExists(id))
                 {
                     return NotFound();
                 }
@@ -75,37 +74,37 @@ namespace GEP.Controllers
             return NoContent();
         }
 
-        // POST: api/Companies
+        // POST: api/Internships
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<Company>> PostCompany(Company company)
+        public async Task<ActionResult<Internships>> PostInternships(Internships internships)
         {
-            _context.Company.Add(company);
+            _context.Internships.Add(internships);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetCompany", new { id = company.Id }, company);
+            return CreatedAtAction("GetInternships", new { id = internships.ID }, internships);
         }
 
-        // DELETE: api/Companies/5
+        // DELETE: api/Internships/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Company>> DeleteCompany(int id)
+        public async Task<ActionResult<Internships>> DeleteInternships(int id)
         {
-            var company = await _context.Company.FindAsync(id);
-            if (company == null)
+            var internships = await _context.Internships.FindAsync(id);
+            if (internships == null)
             {
                 return NotFound();
             }
 
-            _context.Company.Remove(company);
+            _context.Internships.Remove(internships);
             await _context.SaveChangesAsync();
 
-            return company;
+            return internships;
         }
 
-        private bool CompanyExists(int id)
+        private bool InternshipsExists(int id)
         {
-            return _context.Company.Any(e => e.Id == id);
+            return _context.Internships.Any(e => e.ID == id);
         }
     }
 }
