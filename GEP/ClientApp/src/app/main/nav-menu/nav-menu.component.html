@@ -53,7 +53,11 @@
   <ul class="nav">
     <div class="LiItems">
       <li [routerLinkActive]="['link-active']">
-        <section class="ItemSection" [routerLink]="['/gep/home']">
+        <section
+          [ngClass]="{ active: role === 'Estudante' }"
+          class="ItemSection"
+          [routerLink]="['/gep/home']"
+        >
           DashBoard
         </section>
       </li>

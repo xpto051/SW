@@ -8,8 +8,15 @@ import { Router } from "@angular/router";
 })
 export class NavMenuComponent {
   isExpanded = false;
+  role = null;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router) {
+    var payload = JSON.parse(
+      window.atob(localStorage.getItem("token").split(".")[1])
+    );
+    this.role = payload.role;
+    console.log(this.role);
+  }
 
   collapse() {
     this.isExpanded = false;
