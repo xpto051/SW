@@ -49,11 +49,11 @@ namespace GEP.Controllers
         public async Task<IActionResult> PutCompany(int id, Company company)
         {
             
-            if (id != company.id)
+            if (id != company.Id)
             {
                 return BadRequest();
             }
-            company.id = id;
+            company.Id = id;
             _context.Entry(company).State = EntityState.Modified;
 
             try
@@ -84,7 +84,7 @@ namespace GEP.Controllers
             _context.Company.Add(company);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetCompany", new { id = company.id }, company);
+            return CreatedAtAction("GetCompany", new { id = company.Id }, company);
         }
 
         // DELETE: api/Companies/5
@@ -105,7 +105,7 @@ namespace GEP.Controllers
 
         private bool CompanyExists(int id)
         {
-            return _context.Company.Any(e => e.id == id);
+            return _context.Company.Any(e => e.Id == id);
         }
     }
 }

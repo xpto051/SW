@@ -111,6 +111,34 @@ namespace GEP.Controllers
         }
 
         [HttpPost]
+        [Route("CreateResp")]
+        //POST : /api/User/CreateResp
+        public async Task<ActionResult<User>> CreateResp([FromBody] RegistrationRespViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            model.Role = "ResponsavelEmpresa";
+            var userIdentity = _mapper.Map<User>(model);
+            var result = await _userManager.CreateAsync(userIdentity, "12345678jJ");
+            await _userManager.AddToRoleAsync(userIdentity, model.Role);
+
+            if (!result.Succeeded) return new BadRequestObjectResult(Errors.AddErrorsToModelState(result, ModelState));
+
+            CompanyResp newResp = new CompanyResp()
+            {
+                UserId = userIdentity.Id,
+                Company = _context.Company.First(l => l.Id == model.CompanyId)
+            };
+
+            await _context.CompaniesResp.AddAsync(newResp);
+            await _context.SaveChangesAsync();
+
+            return Ok(newResp);
+        }
+
+        [HttpPost]
         [Route("Login")]
         //POST : /api/User/Login
         public async Task<IActionResult> Login(LoginModel model)

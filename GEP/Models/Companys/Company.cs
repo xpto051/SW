@@ -13,7 +13,7 @@ namespace GEP.Models
      
     {
         [Key]
-        public int id { get; set; }
+        public int Id { get; set; }
         public string  Sigla { get; set; }
         [Required]
         public string CompanyName { get; set; }

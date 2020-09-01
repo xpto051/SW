@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GEP.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200831020854_reset")]
-    partial class reset
+    [Migration("20200901162353_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -40,7 +40,7 @@ namespace GEP.Migrations
 
             modelBuilder.Entity("GEP.Models.Company", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -56,7 +56,7 @@ namespace GEP.Migrations
                     b.Property<string>("Sigla")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("id");
+                    b.HasKey("Id");
 
                     b.ToTable("Company");
                 });
@@ -68,10 +68,15 @@ namespace GEP.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("CompanyId")
+                        .HasColumnType("int");
+
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CompanyId");
 
                     b.HasIndex("UserId");
 
@@ -349,6 +354,12 @@ namespace GEP.Migrations
 
             modelBuilder.Entity("GEP.Models.CompanyResp", b =>
                 {
+                    b.HasOne("GEP.Models.Company", "Company")
+                        .WithMany()
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("GEP.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
