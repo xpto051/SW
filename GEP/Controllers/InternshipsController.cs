@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using GEP.Data;
 using GEP.Models;
+using GEP.ViewModels.TFCs;
 
 namespace GEP.Controllers
 {
@@ -78,12 +79,29 @@ namespace GEP.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<Internships>> PostInternships(Internships internships)
+        public async Task<ActionResult<Internships>> PostInternships(IntershipModel model)
         {
-            _context.Internships.Add(internships);
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            Internships i = new Internships()
+            {
+                Vagas = model.Vagas,
+                Proposta = true,
+                Aceite = false,
+                Description = model.Description,
+                Role = model.Role,
+                CompanyRespId = model.CompanyRespId,
+                CompanyResp = await _context.Professors.FindAsync(model.CompanyRespId)
+            };
+
+            _context.Internships.Add(i);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetInternships", new { id = internships.ID }, internships);
+            return CreatedAtAction("GetProject", new { id = i.ID }, i);
         }
 
         // DELETE: api/Internships/5

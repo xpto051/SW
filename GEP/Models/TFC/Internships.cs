@@ -14,10 +14,10 @@ namespace GEP.Models
         [Required]
         public string Role { get; set; }
         [Required]
-        public Company Company { get; set; }
+        public string CompanyName { get; set; }
+        public virtual Company Company { get; set; }
         [Required]
-        public string Description { get; set; }
-
+        
         public int CompanyRespId { get; set; }
         public virtual CompanyResp CompanyResp { get; set; }
 

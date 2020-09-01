@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GEP.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200901011341_init")]
+    [Migration("20200901151042_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -148,6 +148,10 @@ namespace GEP.Migrations
                     b.Property<bool>("Aceite")
                         .HasColumnType("bit");
 
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Discriminator")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -155,7 +159,7 @@ namespace GEP.Migrations
                     b.Property<bool>("Proposta")
                         .HasColumnType("bit");
 
-                    b.Property<int>("vagas")
+                    b.Property<int>("Vagas")
                         .HasColumnType("int");
 
                     b.HasKey("ID");
@@ -376,10 +380,6 @@ namespace GEP.Migrations
 
                     b.Property<int>("CompanyRespId")
                         .HasColumnType("int");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Role")
                         .IsRequired()

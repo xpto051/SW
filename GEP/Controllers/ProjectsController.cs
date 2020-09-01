@@ -44,11 +44,9 @@ namespace GEP.Controllers
             return project;
         }
 
-        // PUT: api/TFC/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
+        // GET: api/Projects/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutProject(int id, Project project)
+        public async Task<IActionResult> PutTFC(int id, Project project)
         {
             if (id != project.ID)
             {
@@ -76,6 +74,8 @@ namespace GEP.Controllers
             return NoContent();
         }
 
+
+
         // POST: api/Projects
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
@@ -93,6 +93,7 @@ namespace GEP.Controllers
                 Vagas = model.Vagas,
                 Proposta = true,
                 Aceite = false,
+                Description =model.Description,
                 Theme = model.Theme,
                 ProfessorID = model.ProfessorID,
                 Professor = await _context.Professors.FindAsync(model.ProfessorID)

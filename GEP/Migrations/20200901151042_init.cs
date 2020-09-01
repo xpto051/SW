@@ -273,13 +273,13 @@ namespace GEP.Migrations
                 {
                     ID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    vagas = table.Column<int>(nullable: false),
+                    Vagas = table.Column<int>(nullable: false),
                     Proposta = table.Column<bool>(nullable: false),
                     Aceite = table.Column<bool>(nullable: false),
+                    Description = table.Column<string>(nullable: false),
                     Discriminator = table.Column<string>(nullable: false),
                     Role = table.Column<string>(nullable: true),
                     CompanyId = table.Column<int>(nullable: true),
-                    Description = table.Column<string>(nullable: true),
                     CompanyRespId = table.Column<int>(nullable: true),
                     Theme = table.Column<string>(nullable: true),
                     ProfessorID = table.Column<int>(nullable: true)

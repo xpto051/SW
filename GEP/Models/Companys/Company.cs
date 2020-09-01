@@ -20,7 +20,7 @@ namespace GEP.Models
         [Required]
         public string Description { get; set; }
 
-        [Display(Name = "Empresa")]
-        public string SiglaName { get { return CompanyName + "-" + Sigla; } }
+        [Display(Name = "Site")]
+        public string URL { get; set; }
     }
 }

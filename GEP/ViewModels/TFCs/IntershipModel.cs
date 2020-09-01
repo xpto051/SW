@@ -6,14 +6,11 @@ using System.Threading.Tasks;
 
 namespace GEP.ViewModels.TFCs
 {
-    //para o post dos projetos
-    public class ProjectModel
+    public class IntershipModel
     {
         public int Vagas { get; set; }
-        public string Theme { get; set; }
-        public int ProfessorID { get; set; }
+        public string Role { get; set; }
+        public int CompanyRespId { get; set; }
         public string Description { get; set; }
-
-
     }
 }

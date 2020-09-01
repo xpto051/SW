@@ -13,5 +13,10 @@ namespace GEP.Models
 
         public string UserId { get; set; }
         public virtual User User { get; set; }
+
+        public static implicit operator CompanyResp(Professor v)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

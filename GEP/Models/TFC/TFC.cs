@@ -21,12 +21,14 @@ namespace GEP.Models
             public bool Proposta { get; set; }
             [DefaultValue(false)]
             public bool Aceite { get; set; }
+            [Required]
+            public string Description { get; set; }
 
-        
-            
 
 
-         
-        }
+
+
+
+    }
     }
 
