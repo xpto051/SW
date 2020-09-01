@@ -14,7 +14,7 @@ namespace GEP.Models
         [Required]
         public string Role { get; set; }
         [Required]
-        public string CompanyId { get; set; }
+        public int CompanyId { get; set; }
         public virtual Company Company { get; set; }
         [Required]
         

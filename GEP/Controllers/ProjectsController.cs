@@ -100,7 +100,7 @@ namespace GEP.Controllers
             _context.Projects.Add(p);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetProject", new { id = p.ID }, p);
+            return Ok(p);
         }
           
           
