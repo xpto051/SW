@@ -39,7 +39,7 @@ namespace GEP.Controllers
                 return NotFound();
             }
 
-            return company;
+            return Ok(company);
         }
 
         // PUT: api/Companies/5
@@ -100,7 +100,7 @@ namespace GEP.Controllers
             _context.Company.Remove(company);
             await _context.SaveChangesAsync();
 
-            return company;
+            return Ok(company);
         }
 
         private bool CompanyExists(int id)
