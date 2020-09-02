@@ -114,7 +114,7 @@ namespace GEP.Controllers
                 return BadRequest(ModelState);
             }
             model.Role = "ResponsavelEmpresa";
-            var userIdentity = _mapper.Map<User>(model);
+            User userIdentity = _mapper.Map<User>(model);
             var result = await _userManager.CreateAsync(userIdentity, "12345678jJ");
             await _userManager.AddToRoleAsync(userIdentity, model.Role);
 
@@ -122,7 +122,7 @@ namespace GEP.Controllers
 
             CompanyResp newResp = new CompanyResp()
             {
-                UserId = userIdentity.Id,
+                User = userIdentity,
                 Company = _context.Company.First(l => l.Id == model.CompanyId)
             };
 

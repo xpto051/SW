@@ -87,21 +87,26 @@ namespace GEP.Controllers
                 return BadRequest(ModelState);
             }
 
+            CompanyResp cr = await _context.CompaniesResp.FindAsync(model.CompanyRespId);
+            Company c = await _context.Company.FindAsync(cr.CompanyId);
+
             Internships i = new Internships()
             {
                 Vagas = model.Vagas,
                 Proposta = true,
                 Aceite = false,
                 Description = model.Description,
-                Role = model.Role,
-                CompanyRespId = model.CompanyRespId,
-                CompanyResp = await _context.CompaniesResp.FindAsync(model.CompanyRespId)
+                Role = model.Role,               
+                CompanyResp = cr, //await _context.CompaniesResp.FindAsync(model.CompanyRespId),
+                Company = c,
+                //CompanyId = c.Id
+
             };
 
             _context.Internships.Add(i);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetProject", new { id = i.ID }, i);
+            return Ok( i);
         }
 
         // DELETE: api/Internships/5
