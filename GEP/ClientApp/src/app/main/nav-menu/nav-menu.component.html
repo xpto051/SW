@@ -53,46 +53,104 @@
   <ul class="nav">
     <div class="LiItems">
       <li [routerLinkActive]="['link-active']">
-        <section
-          [ngClass]="{ active: role === 'Estudante' }"
-          class="ItemSection"
-          [routerLink]="['/gep/home']"
-        >
-          DashBoard
+        <section class="ItemSection" [routerLink]="['/gep/home']">
+          Página Inicial
         </section>
       </li>
       <div class="Separator"></div>
-      <li [routerLinkActive]="['link-active']">
+      <li [routerLinkActive]="['link-active']" class="dropdown">
         <section class="ItemSection" [routerLink]="['/gep/counter']">
-          Counter
+          Estágios
         </section>
+        <div class="dropdown-content">
+          <a [routerLink]="['/gep/add-user']">Ver Estágios</a>
+          <a href="#" *ngIf="role == 'Estudante'">Meu Estágio</a>
+          <a href="#" *ngIf="role == 'Estudante'">Minhas Candidaturas</a>
+          <a href="#" *ngIf="role == 'Admin' || role == 'Coordenador'"
+            >Propostas de Estágio</a
+          >
+          <a href="#" *ngIf="role == 'Admin' || role == 'Coordenador'"
+            >Adicionar Estágios</a
+          >
+        </div>
       </li>
       <div class="Separator"></div>
-      <li [routerLinkActive]="['link-active']">
+      <li [routerLinkActive]="['link-active']" class="dropdown">
+        <section class="ItemSection" [routerLink]="['/gep/counter']">
+          Projectos
+        </section>
+        <div class="dropdown-content">
+          <a [routerLink]="['/gep/add-user']">Ver Projectos</a>
+          <a href="#" *ngIf="role == 'Estudante'">Meu Projecto</a>
+          <a href="#" *ngIf="role == 'Estudante'">Minhas Candidaturas</a>
+          <a href="#" *ngIf="role == 'Admin' || role == 'Coordenador'"
+            >Propostas de Projecto</a
+          >
+          <a
+            href="#"
+            *ngIf="
+              role == 'Admin' || role == 'Coordenador' || role == 'Docente'
+            "
+            >Adicionar Projectos</a
+          >
+        </div>
+      </li>
+      <div class="Separator"></div>
+      <li [routerLinkActive]="['link-active']" class="dropdown">
         <section class="ItemSection" [routerLink]="['/gep/fetch-data']">
-          Fetch Data
+          Estudantes
         </section>
+        <div class="dropdown-content">
+          <a [routerLink]="['/gep/add-user']">Ver Estudantes</a>
+        </div>
       </li>
       <div class="Separator"></div>
-      <li>
-        <button class="btn btn-danger my-2 my-sm-0" (click)="onLogout()">
-          Logout
-        </button>
+      <li [routerLinkActive]="['link-active']" class="dropdown">
+        <section class="ItemSection" [routerLink]="['/gep/fetch-data']">
+          Empresas
+        </section>
+        <div class="dropdown-content">
+          <a [routerLink]="['/gep/add-user']">Ver Empresas</a>
+          <a href="#" *ngIf="role == 'Admin' || role == 'Coordenador'"
+            >Adicionar Empresas</a
+          >
+        </div>
       </li>
+      <div class="Separator"></div>
+      <li
+        [routerLinkActive]="['link-active']"
+        *ngIf="role == 'Admin'"
+        class="dropdown"
+      >
+        <section class="ItemSection" [routerLink]="['/gep/fetch-data']">
+          Gerir Utilizadores
+        </section>
+        <div class="dropdown-content">
+          <a [routerLink]="['/gep/add-user']">Estudantes</a>
+          <a href="#">Docentes</a>
+          <a href="#">Responsáveis de Empresa</a>
+          <a href="#">Coordenadores</a>
+        </div>
+      </li>
+      <div *ngIf="role == 'Admin'" class="Separator"></div>
     </div>
 
     <aside>
       <div class="Profile">
         <div>
           <strong>Joao Martins</strong>
-          <section>Profile</section>
+          <section>{{ role }}</section>
         </div>
-        <div class="Container">
+        <div class="Container dropdown">
           <img
             class="Img"
             src="https://ucc.edu.gh/sites/default/files/default_images/img_avatar_0.png"
             alt="avatar"
           />
+          <div class="dropdown-content-profile">
+            <a [routerLink]="['/gep/add-user']">Definições</a>
+            <a role="button" (click)="onLogout()">Sair</a>
+          </div>
         </div>
       </div>
     </aside>
