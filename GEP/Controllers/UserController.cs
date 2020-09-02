@@ -60,7 +60,7 @@ namespace GEP.Controllers
             {
                 return BadRequest(ModelState);
             }
-            model.Role = "ResponsavelEmpresa";
+            model.Role = "Admin";
             var userIdentity = _mapper.Map<User>(model);
             var result = await _userManager.CreateAsync(userIdentity, "12345678jJ");
             await _userManager.AddToRoleAsync(userIdentity, model.Role);
@@ -82,12 +82,6 @@ namespace GEP.Controllers
             if (model.Role == "Docente")
             {
                 await _context.Professors.AddAsync(new Professor { UserId = userIdentity.Id });
-                await _context.SaveChangesAsync();
-            }
-
-            if (model.Role == "ResponsavelEmpresa")
-            {
-                await _context.CompaniesResp.AddAsync(new CompanyResp { UserId = userIdentity.Id });
                 await _context.SaveChangesAsync();
             }
 
