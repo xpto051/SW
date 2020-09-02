@@ -1,0 +1,4 @@
+C:\Users\roflb\source\repos\SW_1920\MailServer\bin\Microsoft.NodejsTools.WebRole.dll
+C:\Users\roflb\Documents\GitHub\SW\MailServer\obj\Debug\MailServer.njsprojAssemblyReference.cache
+C:\Users\roflb\Documents\GitHub\SW\MailServer\obj\Debug\MailServer.njsproj.CoreCompileInputs.cache
+C:\Users\roflb\Documents\GitHub\SW\MailServer\bin\Microsoft.NodejsTools.WebRole.dll

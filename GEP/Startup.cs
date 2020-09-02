@@ -19,6 +19,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using GEP.Helpers;
 using GEP.Models.Roles;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using GEP.Services;
 
 namespace GEP
 {
@@ -60,6 +62,8 @@ namespace GEP
             });
 
             services.AddAutoMapper(typeof(ViewModelToEntityMappingProfile));
+
+            services.AddTransient<IEmailSender, EmailSender>();
 
             //Jwt authentication
             var secretKey = Encoding.ASCII.GetBytes(Configuration["ApplicationSettings:JWT_SECRET"]);

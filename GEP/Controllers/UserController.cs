@@ -4,6 +4,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
+using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using AutoMapper;
 using GEP.Data;
@@ -12,7 +13,9 @@ using GEP.Models;
 using GEP.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -29,13 +32,19 @@ namespace GEP.Controllers
         private readonly UserManager<User> _userManager;
         private readonly ApplicationSettings _appSettings;
         private readonly IMapper _mapper;
+        private readonly IEmailSender _emailSender;
 
-        public UserController(ApplicationDbContext context, UserManager<User> userManager, IMapper mapper, IOptions<ApplicationSettings> appSettings)
+        public UserController(ApplicationDbContext context, 
+            UserManager<User> userManager, 
+            IMapper mapper, 
+            IOptions<ApplicationSettings> appSettings,
+            IEmailSender emailSender)
         {
             _context = context;
             _userManager = userManager;
             _mapper = mapper;
             _appSettings = appSettings.Value;
+            _emailSender = emailSender;
         }
 
         [HttpGet]
@@ -91,6 +100,13 @@ namespace GEP.Controllers
                 await _context.SaveChangesAsync();
             }
 
+            var code = await _userManager.GenerateEmailConfirmationTokenAsync(userIdentity);
+            code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+
+            var link = Url.Action("ConfirmEmail", "User", new { userId = userIdentity.Id, code }, Request.Scheme);
+
+            await _emailSender.SendEmailAsync(userIdentity.Email, "ConfirmarConta", $"Clique <a href={HtmlEncoder.Default.Encode(link)}>aqui</a> para confirmar a sua conta!");
+
             return new OkResult();
             /*
             var response = await _userManager.CreateAsync(user, "aA!12345678");
@@ -102,6 +118,33 @@ namespace GEP.Controllers
             {
                 return Unauthorized(response.Errors);
             }*/
+        }
+
+        [HttpGet]
+        [Route("confirm")]
+        public async Task<ActionResult> ConfirmEmail(string userId, string code)
+        {
+            if(userId == null || code == null)
+            {
+                return BadRequest();
+            }
+
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if(user == null)
+            {
+                return BadRequest("User Não Existe!");
+            }
+
+            code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
+            var result = await _userManager.ConfirmEmailAsync(user, code);
+
+            if (result.Succeeded)
+            {
+                return Ok();
+            }
+
+            return BadRequest("Puta Que Pariu!");
         }
 
         [HttpPost]
@@ -138,7 +181,7 @@ namespace GEP.Controllers
         public async Task<IActionResult> Login(LoginModel model)
         {
             var user = await _userManager.FindByEmailAsync(model.Email);
-            if(user != null && await _userManager.CheckPasswordAsync(user, model.Password))
+            if(user != null && await _userManager.CheckPasswordAsync(user, model.Password) && await _userManager.IsEmailConfirmedAsync(user))
             {
                 //get role assigned to the user
                 var role = await _userManager.GetRolesAsync(user);
