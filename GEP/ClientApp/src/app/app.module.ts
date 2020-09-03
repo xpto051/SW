@@ -11,6 +11,9 @@ import {
   MatButtonModule,
   MatCheckboxModule,
   MatIconModule,
+  MatTableModule,
+  MatDialogModule,
+  MAT_DIALOG_DEFAULT_OPTIONS
 } from "@angular/material";
 
 import { AppComponent } from "./app.component";
@@ -27,6 +30,8 @@ import { AuthInterceptor } from "./auth/auth.interceptor";
 import { AddUserComponent } from "./main/add-user/add-user.component";
 import { ForbiddenComponent } from "./main/forbidden/forbidden.component";
 import { UserSettingsComponent } from "./main/user-settings/user-settings.component";
+import { CompanyDetailsComponent } from './main/company-details/company-details.component';
+import { DialogCompanyComponent } from './main/components/dialog-company/dialog-company.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +45,8 @@ import { UserSettingsComponent } from "./main/user-settings/user-settings.compon
     AddUserComponent,
     ForbiddenComponent,
     UserSettingsComponent,
+    CompanyDetailsComponent,
+    DialogCompanyComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: "ng-cli-universal" }),
@@ -52,6 +59,8 @@ import { UserSettingsComponent } from "./main/user-settings/user-settings.compon
     MatButtonModule,
     MatCheckboxModule,
     MatIconModule,
+    MatTableModule,
+    MatDialogModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot({
       positionClass: "toast-top-right",
@@ -75,6 +84,7 @@ import { UserSettingsComponent } from "./main/user-settings/user-settings.compon
             canActivate: [AuthGuard],
             data: { permittedRoles: ["Admin"] },
           },
+          { path: "viewCompanies", component: CompanyDetailsComponent },
           { path: "settings", component: UserSettingsComponent },
         ],
       },
@@ -86,7 +96,12 @@ import { UserSettingsComponent } from "./main/user-settings/user-settings.compon
       useClass: AuthInterceptor,
       multi: true,
     },
+    {
+      provide: MAT_DIALOG_DEFAULT_OPTIONS,
+      useValue: { hasBackdrop: false }
+    }
   ],
   bootstrap: [AppComponent],
+  entryComponents: []
 })
-export class AppModule {}
+export class AppModule { }
