@@ -37,6 +37,18 @@ ul.nav {
   margin: 0px;
 }
 
+img.logo {
+  height: 50px;
+  width: 45px;
+  margin-right: 35px;
+}
+img.logo:hover {
+  cursor: pointer;
+}
+img.logo:focus {
+  outline: 0;
+}
+
 section.ItemSection {
   color: #00171f;
 }

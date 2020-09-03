@@ -26,6 +26,7 @@ import { AuthGuard } from "./auth/auth.guard";
 import { AuthInterceptor } from "./auth/auth.interceptor";
 import { AddUserComponent } from "./main/add-user/add-user.component";
 import { ForbiddenComponent } from "./main/forbidden/forbidden.component";
+import { UserSettingsComponent } from "./main/user-settings/user-settings.component";
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import { ForbiddenComponent } from "./main/forbidden/forbidden.component";
     MainComponent,
     AddUserComponent,
     ForbiddenComponent,
+    UserSettingsComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: "ng-cli-universal" }),
@@ -68,11 +70,12 @@ import { ForbiddenComponent } from "./main/forbidden/forbidden.component";
           { path: "counter", component: CounterComponent },
           { path: "fetch-data", component: FetchDataComponent },
           {
-            path: "add-user",
+            path: "addUser",
             component: AddUserComponent,
             canActivate: [AuthGuard],
             data: { permittedRoles: ["Admin"] },
           },
+          { path: "settings", component: UserSettingsComponent },
         ],
       },
     ]),

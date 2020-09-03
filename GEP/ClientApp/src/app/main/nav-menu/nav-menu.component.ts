@@ -1,5 +1,6 @@
-import { Component } from "@angular/core";
+import { Component, Inject } from "@angular/core";
 import { Router } from "@angular/router";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 
 @Component({
   selector: "app-nav-menu",
@@ -10,12 +11,34 @@ export class NavMenuComponent {
   isExpanded = false;
   role = null;
 
-  constructor(private router: Router) {
+  userDetails;
+
+  constructor(
+    private router: Router,
+    private http: HttpClient,
+    @Inject("BASE_URL") private baseUrl: string
+  ) {
     var payload = JSON.parse(
       window.atob(localStorage.getItem("token").split(".")[1])
     );
     this.role = payload.role;
     console.log(this.role);
+  }
+
+  ngOnInit() {
+    var url = this.baseUrl + "api/userprofile";
+    var token = new HttpHeaders({
+      Authorization: "Bearer " + localStorage.getItem("token"),
+    });
+    this.http.get(url, { headers: token }).subscribe(
+      (res) => {
+        this.userDetails = res;
+        console.log(this.userDetails);
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
   }
 
   collapse() {

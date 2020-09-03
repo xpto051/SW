@@ -69,16 +69,17 @@ namespace GEP.Controllers
             {
                 return BadRequest(ModelState);
             }
-            model.Role = "Admin";
+            model.Role = "Estudante";
             var userIdentity = _mapper.Map<User>(model);
             var result = await _userManager.CreateAsync(userIdentity, "12345678jJ");
+            var user = await _userManager.Users.FirstOrDefaultAsync(m => m.Id == userIdentity.Id);
             await _userManager.AddToRoleAsync(userIdentity, model.Role);
 
             if (!result.Succeeded) return new BadRequestObjectResult(Errors.AddErrorsToModelState(result, ModelState));
 
             if (model.Role == "Estudante")
             {
-                await _context.Students.AddAsync(new Student { UserId = userIdentity.Id });
+                await _context.Students.AddAsync(new Student { UserId = userIdentity.Id, User = user });
                 await _context.SaveChangesAsync();
             }
 
