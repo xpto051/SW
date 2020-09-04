@@ -8,7 +8,6 @@ using Microsoft.EntityFrameworkCore;
 using GEP.Data;
 using GEP.Models;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Authorization;
 using GEP.Helpers;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -22,7 +21,7 @@ namespace GEP.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class StudentsController : ControllerBase
+    public class ProfessorsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<User> _userManager;
@@ -30,7 +29,7 @@ namespace GEP.Controllers
         private readonly IMapper _mapper;
         private readonly IEmailSender _emailSender;
 
-        public StudentsController(ApplicationDbContext context,
+        public ProfessorsController(ApplicationDbContext context,
             UserManager<User> userManager,
             IMapper mapper,
             IOptions<ApplicationSettings> appSettings,
@@ -43,40 +42,71 @@ namespace GEP.Controllers
             _emailSender = emailSender;
         }
 
-        // GET: api/Students
+        // GET: api/Professors
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Student>>> GetStudents()
+        public async Task<ActionResult<IEnumerable<Professor>>> GetProfessors()
         {
-            List<Student> students = await _context.Students.ToListAsync();
-            foreach (Student s in students)
+            List<Professor> professors = await _context.Professors.ToListAsync();
+            foreach (Professor p in professors)
             {
-                s.User = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == s.UserId);
-                s.Course = await _context.Course.FindAsync(s.CourseId);
+                p.User = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == p.UserId);
             }
-            return students;
+            return professors;
         }
 
-        // GET: api/Students/5
+        // GET: api/Professors/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Student>> GetStudent(int id)
+        public async Task<ActionResult<Professor>> GetProfessor(int id)
         {
-            var student = await _context.Students.FindAsync(id);
-            student.User = await _userManager.Users.FirstOrDefaultAsync(m => m.Id == student.UserId);
-            student.Course = await _context.Course.FindAsync(student.CourseId);
+            var professor = await _context.Professors.FindAsync(id);
+            professor.User = await _userManager.Users.FirstOrDefaultAsync(m => m.Id == professor.UserId);
 
-            if (student == null)
+            if (professor == null)
             {
                 return NotFound();
             }
 
-            return student;
+            return professor;
+
         }
 
-        // POST: api/Students
+        // PUT: api/Professors/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to, for
+        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutProfessor(int id, Professor professor)
+        {
+            if (id != professor.Id)
+            {
+                return BadRequest();
+            }
+
+            _context.Entry(professor).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!ProfessorExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
+
+        // POST: api/Professors
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<User>> PostStudent([FromBody] RegistrationStudentsViewModel model)
+        public async Task<ActionResult<Professor>> PostProfessor([FromBody] RegistrationProfViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -85,18 +115,17 @@ namespace GEP.Controllers
 
             User userIdentity = _mapper.Map<User>(model);
             var result = await _userManager.CreateAsync(userIdentity, "12345678jJ");
-            await _userManager.AddToRoleAsync(userIdentity, "Estudante");
+            await _userManager.AddToRoleAsync(userIdentity, "Docente");
 
             if (!result.Succeeded) return new BadRequestObjectResult(Errors.AddErrorsToModelState(result, ModelState));
 
-            Student newStudent = new Student()
+            Professor newProf = new Professor()
             {
                 User = userIdentity,
-                Number = model.Number,
-                Course =  _context.Course.First(c => c.Id == model.CourseId)
+                Number = model.Number
             };
 
-            await _context.Students.AddAsync(newStudent);
+            await _context.Professors.AddAsync(newProf);
             await _context.SaveChangesAsync();
 
             var code = await _userManager.GenerateEmailConfirmationTokenAsync(userIdentity);
@@ -107,7 +136,7 @@ namespace GEP.Controllers
             await _emailSender.SendEmailAsync(userIdentity.Email, "ConfirmarConta", $"Clique <a href={HtmlEncoder.Default.Encode(link)}>aqui</a> para confirmar a sua conta!");
 
 
-            return Ok(newStudent);
+            return Ok(newProf);
         }
 
         [HttpGet]
@@ -137,61 +166,29 @@ namespace GEP.Controllers
             return BadRequest("Erro");
         }
 
-        // PUT: api/Students/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutStudent(int id, Student student)
-        {
-            if (id != student.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(student).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!StudentExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        // DELETE: api/Students/5
+        // DELETE: api/Professors/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Student>> DeleteStudent(int id)
+        public async Task<ActionResult<Professor>> DeleteProfessor(int id)
         {
-            var student = await _context.Students.FindAsync(id);
-            var user = await _userManager.Users.FirstOrDefaultAsync(m => m.Id == student.UserId);
+            var prof = await _context.Professors.FindAsync(id);
+            var user = await _userManager.Users.FirstOrDefaultAsync(m => m.Id == prof.UserId);
 
-            if (student == null)
+            if (prof == null)
             {
                 return NotFound();
             }
 
-            _context.Students.Remove(student);
+            _context.Professors.Remove(prof);
 
             await _userManager.DeleteAsync(user);
             await _context.SaveChangesAsync();
 
-            return student;
+            return prof;
         }
 
-        private bool StudentExists(int id)
+        private bool ProfessorExists(int id)
         {
-            return _context.Students.Any(e => e.Id == id);
+            return _context.Professors.Any(e => e.Id == id);
         }
     }
 }

@@ -26,6 +26,7 @@ namespace GEP.Data
         public DbSet<Project> Projects { get; set; }
         public DbSet<Internships> Internships { get; set; }
         public DbSet<TFC> TFCs { get; set; }
+        public DbSet<Course> Course { get; set; }
 
     }
 }

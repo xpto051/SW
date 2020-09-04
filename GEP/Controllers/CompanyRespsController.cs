@@ -8,10 +8,9 @@ using Microsoft.EntityFrameworkCore;
 using GEP.Data;
 using GEP.Models;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Authorization;
 using GEP.Helpers;
-using AutoMapper;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using AutoMapper;
 using Microsoft.Extensions.Options;
 using GEP.ViewModels;
 using Microsoft.AspNetCore.WebUtilities;
@@ -22,7 +21,7 @@ namespace GEP.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class StudentsController : ControllerBase
+    public class CompanyRespsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<User> _userManager;
@@ -30,7 +29,7 @@ namespace GEP.Controllers
         private readonly IMapper _mapper;
         private readonly IEmailSender _emailSender;
 
-        public StudentsController(ApplicationDbContext context,
+        public CompanyRespsController(ApplicationDbContext context,
             UserManager<User> userManager,
             IMapper mapper,
             IOptions<ApplicationSettings> appSettings,
@@ -43,40 +42,37 @@ namespace GEP.Controllers
             _emailSender = emailSender;
         }
 
-        // GET: api/Students
+        // GET: api/CompanyResps
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Student>>> GetStudents()
+        public async Task<ActionResult<IEnumerable<CompanyResp>>> GetCompaniesResp()
         {
-            List<Student> students = await _context.Students.ToListAsync();
-            foreach (Student s in students)
+            List<CompanyResp> companyResps = await _context.CompaniesResp.ToListAsync();
+            foreach (CompanyResp s in companyResps)
             {
                 s.User = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == s.UserId);
-                s.Course = await _context.Course.FindAsync(s.CourseId);
+                s.Company = await _context.Company.FindAsync(s.CompanyId);
             }
-            return students;
+            return companyResps;
         }
 
-        // GET: api/Students/5
+        // GET: api/CompanyResps/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Student>> GetStudent(int id)
+        public async Task<ActionResult<CompanyResp>> GetCompanyResp(int id)
         {
-            var student = await _context.Students.FindAsync(id);
-            student.User = await _userManager.Users.FirstOrDefaultAsync(m => m.Id == student.UserId);
-            student.Course = await _context.Course.FindAsync(student.CourseId);
-
-            if (student == null)
+            var companyResp = await _context.CompaniesResp.FindAsync(id);
+            companyResp.User = await _userManager.Users.FirstOrDefaultAsync(m => m.Id == companyResp.UserId);
+            companyResp.Company = await _context.Company.FindAsync(companyResp.CompanyId);
+            if (companyResp == null)
             {
                 return NotFound();
             }
 
-            return student;
+            return companyResp;
         }
 
-        // POST: api/Students
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<User>> PostStudent([FromBody] RegistrationStudentsViewModel model)
+        //POST : /api/CompanyResps
+        public async Task<ActionResult<User>> PostCompanyResp([FromBody] RegistrationRespViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -85,18 +81,17 @@ namespace GEP.Controllers
 
             User userIdentity = _mapper.Map<User>(model);
             var result = await _userManager.CreateAsync(userIdentity, "12345678jJ");
-            await _userManager.AddToRoleAsync(userIdentity, "Estudante");
+            await _userManager.AddToRoleAsync(userIdentity, "ResponsavelEmpresa");
 
             if (!result.Succeeded) return new BadRequestObjectResult(Errors.AddErrorsToModelState(result, ModelState));
 
-            Student newStudent = new Student()
+            CompanyResp newResp = new CompanyResp()
             {
                 User = userIdentity,
-                Number = model.Number,
-                Course =  _context.Course.First(c => c.Id == model.CourseId)
+                Company = _context.Company.First(l => l.Id == model.CompanyId)
             };
 
-            await _context.Students.AddAsync(newStudent);
+            await _context.CompaniesResp.AddAsync(newResp);
             await _context.SaveChangesAsync();
 
             var code = await _userManager.GenerateEmailConfirmationTokenAsync(userIdentity);
@@ -107,7 +102,38 @@ namespace GEP.Controllers
             await _emailSender.SendEmailAsync(userIdentity.Email, "ConfirmarConta", $"Clique <a href={HtmlEncoder.Default.Encode(link)}>aqui</a> para confirmar a sua conta!");
 
 
-            return Ok(newStudent);
+            return Ok(newResp);
+        }
+
+        // PUT: api/CompanyResps/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to, for
+        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutCompanyResp(int id, CompanyResp companyResp)
+        {
+            if (id != companyResp.Id)
+            {
+                return BadRequest();
+            }
+
+            _context.Entry(companyResp).State = EntityState.Modified;
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!CompanyRespExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
         }
 
         [HttpGet]
@@ -137,61 +163,29 @@ namespace GEP.Controllers
             return BadRequest("Erro");
         }
 
-        // PUT: api/Students/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutStudent(int id, Student student)
-        {
-            if (id != student.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(student).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!StudentExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        // DELETE: api/Students/5
+        // DELETE: api/CompanyResps/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Student>> DeleteStudent(int id)
+        public async Task<ActionResult<CompanyResp>> DeleteCompanyResp(int id)
         {
-            var student = await _context.Students.FindAsync(id);
-            var user = await _userManager.Users.FirstOrDefaultAsync(m => m.Id == student.UserId);
+            var companyResp = await _context.CompaniesResp.FindAsync(id);
+            var user = await _userManager.Users.FirstOrDefaultAsync(m => m.Id == companyResp.UserId);
 
-            if (student == null)
+            if (companyResp == null)
             {
                 return NotFound();
             }
 
-            _context.Students.Remove(student);
+            _context.CompaniesResp.Remove(companyResp);
 
             await _userManager.DeleteAsync(user);
             await _context.SaveChangesAsync();
 
-            return student;
+            return companyResp;
         }
 
-        private bool StudentExists(int id)
+        private bool CompanyRespExists(int id)
         {
-            return _context.Students.Any(e => e.Id == id);
+            return _context.CompaniesResp.Any(e => e.Id == id);
         }
     }
 }

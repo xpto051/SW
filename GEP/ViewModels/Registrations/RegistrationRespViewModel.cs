@@ -6,15 +6,11 @@ using System.Threading.Tasks;
 
 namespace GEP.ViewModels
 {
-    public class RegistrationViewModel
+    public class RegistrationRespViewModel
     {
         [Required]
         [EmailAddress]
         public string Email { get; set; }
-
-        [Required]
-        [Display(Name = "Número do Estudante")]
-        public long Number { get; set; }
 
         [Required]
         [Display(Name = "Primeiro Nome")]
@@ -24,6 +20,8 @@ namespace GEP.ViewModels
         [Display(Name = "Ultimo Nome")]
         public string LastName { get; set; }
 
-        public string Role { get; set; }
+        [Required]
+        [Display(Name = "Empresa")]
+        public int CompanyId { get; set; }
     }
 }

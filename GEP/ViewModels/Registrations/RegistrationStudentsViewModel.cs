@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GEP.ViewModels
 {
-    public class RegistrationRespViewModel
+    public class RegistrationStudentsViewModel
     {
         [Required]
         [EmailAddress]
@@ -24,10 +24,8 @@ namespace GEP.ViewModels
         [Display(Name = "Ultimo Nome")]
         public string LastName { get; set; }
 
-        public string Role { get; set; }
-
         [Required]
-        [Display(Name = "Empresa")]
-        public int CompanyId { get; set; }
+        [Display(Name = "Curso")]
+        public int CourseId { get; set; }
     }
 }

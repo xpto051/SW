@@ -13,6 +13,9 @@ namespace GEP.Models
 
         public long Number { get; set; }
 
+        public int CourseId { get; set; }
+        public Course Course { get; set; }
+
         public string UserId { get; set; }
         public virtual User User { get; set; }
     }

@@ -43,6 +43,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20200903171435_initial.cs" />
+    <Compile Remove="Migrations\20200903171435_initial.Designer.cs" />
+    <Compile Remove="Migrations\20200903172044_initial.cs" />
+    <Compile Remove="Migrations\20200903172044_initial.Designer.cs" />
+    <Compile Remove="Migrations\20200903172407_initail.cs" />
+    <Compile Remove="Migrations\20200903172407_initail.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Models\Roles\" />
   </ItemGroup>
 

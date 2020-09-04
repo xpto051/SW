@@ -69,38 +69,16 @@ namespace GEP.Controllers
             {
                 return BadRequest(ModelState);
             }
-            model.Role = "Estudante";
             var userIdentity = _mapper.Map<User>(model);
             var result = await _userManager.CreateAsync(userIdentity, "12345678jJ");
             var user = await _userManager.Users.FirstOrDefaultAsync(m => m.Id == userIdentity.Id);
-            await _userManager.AddToRoleAsync(userIdentity, model.Role);
+            await _userManager.AddToRoleAsync(userIdentity, "Admin");
 
             if (!result.Succeeded) return new BadRequestObjectResult(Errors.AddErrorsToModelState(result, ModelState));
 
-            if (model.Role == "Estudante")
-            {
-                await _context.Students.AddAsync(new Student { UserId = userIdentity.Id, User = user });
-                await _context.SaveChangesAsync();
-            }
-
-            if(model.Role == "Admin")
-            {
-                await _context.Admins.AddAsync(new Admin { UserId = userIdentity.Id });
-                await _context.SaveChangesAsync();
-            }
-
-            if (model.Role == "Docente")
-            {
-                await _context.Professors.AddAsync(new Professor { UserId = userIdentity.Id });
-                await _context.SaveChangesAsync();
-            }
-
-            if (model.Role == "Coordenador")
-            {
-                await _context.Coordenators.AddAsync(new Coordenator { UserId = userIdentity.Id });
-                await _context.SaveChangesAsync();
-            }
-
+            await _context.Admins.AddAsync(new Admin { UserId = userIdentity.Id });
+            await _context.SaveChangesAsync();
+            
             var code = await _userManager.GenerateEmailConfirmationTokenAsync(userIdentity);
             code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
 
@@ -145,36 +123,10 @@ namespace GEP.Controllers
                 return Ok();
             }
 
-            return BadRequest("Puta Que Pariu!");
+            return BadRequest("Erro");
         }
 
-        [HttpPost]
-        [Route("CreateResp")]
-        //POST : /api/User/CreateResp
-        public async Task<ActionResult<User>> CreateResp([FromBody] RegistrationRespViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            model.Role = "ResponsavelEmpresa";
-            User userIdentity = _mapper.Map<User>(model);
-            var result = await _userManager.CreateAsync(userIdentity, "12345678jJ");
-            await _userManager.AddToRoleAsync(userIdentity, model.Role);
 
-            if (!result.Succeeded) return new BadRequestObjectResult(Errors.AddErrorsToModelState(result, ModelState));
-
-            CompanyResp newResp = new CompanyResp()
-            {
-                User = userIdentity,
-                Company = _context.Company.First(l => l.Id == model.CompanyId)
-            };
-
-            await _context.CompaniesResp.AddAsync(newResp);
-            await _context.SaveChangesAsync();
-
-            return Ok(newResp);
-        }
 
         [HttpPost]
         [Route("Login")]
@@ -202,7 +154,11 @@ namespace GEP.Controllers
                 var token = tokenHandler.WriteToken(securityToken);
                 return Ok(new { token });
             } 
-            else
+            else if(user.EmailConfirmed == false)
+            {
+                return BadRequest(new { message = "O email ainda nao foi confirmado." });
+
+            }
             {
                 return BadRequest(new { message = "Email or password are incorrect." });
             }

@@ -7,54 +7,57 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using GEP.Data;
 using GEP.Models;
+using GEP.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GEP.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CompaniesController : ControllerBase
+    public class CoursesController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
 
-        public CompaniesController(ApplicationDbContext context)
+        public CoursesController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: api/Companies
+        // GET: api/Courses
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Company>>> GetCompany()
+        public async Task<ActionResult<IEnumerable<Course>>> GetCourse()
         {
-            return await _context.Company.ToArrayAsync();
+            return await _context.Course.ToListAsync();
         }
 
-        // GET: api/Companies/5
+        // GET: api/Courses/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Company>> GetCompany(int id)
+        [Authorize]
+        public async Task<ActionResult<Course>> GetCourse(int id)
         {
-            var company = await _context.Company.FindAsync(id);
+            var course = await _context.Course.FindAsync(id);
 
-            if (company == null)
+            if (course == null)
             {
                 return NotFound();
             }
 
-            return Ok(company);
+            return course;
         }
 
-        // PUT: api/Companies/5
+        // PUT: api/Courses/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCompany(int id, Company company)
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> PutCourse(int id, Course course)
         {
-            
-            if (id != company.Id)
+            if (id != course.Id)
             {
                 return BadRequest();
             }
-            
-            _context.Entry(company).State = EntityState.Modified;
+
+            _context.Entry(course).State = EntityState.Modified;
 
             try
             {
@@ -62,7 +65,7 @@ namespace GEP.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!CompanyExists(id))
+                if (!CourseExists(id))
                 {
                     return NotFound();
                 }
@@ -75,37 +78,44 @@ namespace GEP.Controllers
             return NoContent();
         }
 
-        // POST: api/Companies
+        // POST: api/Courses
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<Company>> PostCompany(Company company)
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult<Course>> PostCourse(CourseViewModel course)
         {
-            _context.Company.Add(company);
+            Course c = new Course()
+            {
+                Designação = course.Designação,
+                Sigla = course.Sigla
+            };
+            _context.Course.Add(c);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetCompany", new { id = company.Id }, company);
+            return Ok(c);
         }
 
-        // DELETE: api/Companies/5
+        // DELETE: api/Courses/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Company>> DeleteCompany(int id)
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult<Course>> DeleteCourse(int id)
         {
-            var company = await _context.Company.FindAsync(id);
-            if (company == null)
+            var course = await _context.Course.FindAsync(id);
+            if (course == null)
             {
                 return NotFound();
             }
 
-            _context.Company.Remove(company);
+            _context.Course.Remove(course);
             await _context.SaveChangesAsync();
 
-            return Ok(company);
+            return course;
         }
 
-        private bool CompanyExists(int id)
+        private bool CourseExists(int id)
         {
-            return _context.Company.Any(e => e.Id == id);
+            return _context.Course.Any(e => e.Id == id);
         }
     }
 }

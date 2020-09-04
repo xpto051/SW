@@ -22,7 +22,6 @@ export class NavMenuComponent {
       window.atob(localStorage.getItem("token").split(".")[1])
     );
     this.role = payload.role;
-    console.log(this.role);
   }
 
   ngOnInit() {
@@ -33,7 +32,6 @@ export class NavMenuComponent {
     this.http.get(url, { headers: token }).subscribe(
       (res) => {
         this.userDetails = res;
-        console.log(this.userDetails);
       },
       (err) => {
         console.log(err);

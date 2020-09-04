@@ -8,7 +8,6 @@ using Microsoft.EntityFrameworkCore;
 using GEP.Data;
 using GEP.Models;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Authorization;
 using GEP.Helpers;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -22,7 +21,7 @@ namespace GEP.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class StudentsController : ControllerBase
+    public class CoordenatorsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<User> _userManager;
@@ -30,7 +29,7 @@ namespace GEP.Controllers
         private readonly IMapper _mapper;
         private readonly IEmailSender _emailSender;
 
-        public StudentsController(ApplicationDbContext context,
+        public CoordenatorsController(ApplicationDbContext context,
             UserManager<User> userManager,
             IMapper mapper,
             IOptions<ApplicationSettings> appSettings,
@@ -43,40 +42,72 @@ namespace GEP.Controllers
             _emailSender = emailSender;
         }
 
-        // GET: api/Students
+        // GET: api/Coordenators
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Student>>> GetStudents()
+        public async Task<ActionResult<IEnumerable<Coordenator>>> GetCoordenators()
         {
-            List<Student> students = await _context.Students.ToListAsync();
-            foreach (Student s in students)
+            List<Coordenator> coordenators = await _context.Coordenators.ToListAsync();
+            foreach (Coordenator s in coordenators)
             {
                 s.User = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == s.UserId);
                 s.Course = await _context.Course.FindAsync(s.CourseId);
             }
-            return students;
+            return coordenators;
         }
 
-        // GET: api/Students/5
+        // GET: api/Coordenators/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Student>> GetStudent(int id)
+        public async Task<ActionResult<Coordenator>> GetCoordenator(int id)
         {
-            var student = await _context.Students.FindAsync(id);
-            student.User = await _userManager.Users.FirstOrDefaultAsync(m => m.Id == student.UserId);
-            student.Course = await _context.Course.FindAsync(student.CourseId);
+            var coordenator = await _context.Coordenators.FindAsync(id);
+            coordenator.User = await _userManager.Users.FirstOrDefaultAsync(m => m.Id == coordenator.UserId);
+            coordenator.Course = await _context.Course.FindAsync(coordenator.CourseId);
 
-            if (student == null)
+            if (coordenator == null)
             {
                 return NotFound();
             }
 
-            return student;
+            return coordenator;
         }
 
-        // POST: api/Students
+        // PUT: api/Coordenators/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to, for
+        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutCoordenator(int id, Coordenator coordenator)
+        {
+            if (id != coordenator.Id)
+            {
+                return BadRequest();
+            }
+
+            _context.Entry(coordenator).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!CoordenatorExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
+
+        // POST: api/Coordenators
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<User>> PostStudent([FromBody] RegistrationStudentsViewModel model)
+        public async Task<ActionResult<Coordenator>> PostCoordenator([FromBody] RegistrationCoordenatorViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -85,18 +116,18 @@ namespace GEP.Controllers
 
             User userIdentity = _mapper.Map<User>(model);
             var result = await _userManager.CreateAsync(userIdentity, "12345678jJ");
-            await _userManager.AddToRoleAsync(userIdentity, "Estudante");
+            await _userManager.AddToRoleAsync(userIdentity, "Coordenador");
 
             if (!result.Succeeded) return new BadRequestObjectResult(Errors.AddErrorsToModelState(result, ModelState));
 
-            Student newStudent = new Student()
+            Coordenator newCoordenator = new Coordenator()
             {
                 User = userIdentity,
                 Number = model.Number,
-                Course =  _context.Course.First(c => c.Id == model.CourseId)
+                Course = _context.Course.First(c => c.Id == model.CourseId)
             };
 
-            await _context.Students.AddAsync(newStudent);
+            await _context.Coordenators.AddAsync(newCoordenator);
             await _context.SaveChangesAsync();
 
             var code = await _userManager.GenerateEmailConfirmationTokenAsync(userIdentity);
@@ -107,7 +138,7 @@ namespace GEP.Controllers
             await _emailSender.SendEmailAsync(userIdentity.Email, "ConfirmarConta", $"Clique <a href={HtmlEncoder.Default.Encode(link)}>aqui</a> para confirmar a sua conta!");
 
 
-            return Ok(newStudent);
+            return Ok(newCoordenator);
         }
 
         [HttpGet]
@@ -137,61 +168,29 @@ namespace GEP.Controllers
             return BadRequest("Erro");
         }
 
-        // PUT: api/Students/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutStudent(int id, Student student)
-        {
-            if (id != student.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(student).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!StudentExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        // DELETE: api/Students/5
+        // DELETE: api/Coordenators/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Student>> DeleteStudent(int id)
+        public async Task<ActionResult<Coordenator>> DeleteCoordenator(int id)
         {
-            var student = await _context.Students.FindAsync(id);
-            var user = await _userManager.Users.FirstOrDefaultAsync(m => m.Id == student.UserId);
+            var coordenator = await _context.Coordenators.FindAsync(id);
+            var user = await _userManager.Users.FirstOrDefaultAsync(m => m.Id == coordenator.UserId);
 
-            if (student == null)
+            if (coordenator == null)
             {
                 return NotFound();
             }
 
-            _context.Students.Remove(student);
+            _context.Coordenators.Remove(coordenator);
 
             await _userManager.DeleteAsync(user);
             await _context.SaveChangesAsync();
 
-            return student;
+            return coordenator;
         }
 
-        private bool StudentExists(int id)
+        private bool CoordenatorExists(int id)
         {
-            return _context.Students.Any(e => e.Id == id);
+            return _context.Coordenators.Any(e => e.Id == id);
         }
     }
 }

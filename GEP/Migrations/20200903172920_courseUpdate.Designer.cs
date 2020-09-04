@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GEP.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200901171942_initial")]
-    partial class initial
+    [Migration("20200903172920_courseUpdate")]
+    partial class courseUpdate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -93,6 +93,9 @@ namespace GEP.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("CourseId")
+                        .HasColumnType("int");
+
                     b.Property<long>("Number")
                         .HasColumnType("bigint");
 
@@ -101,9 +104,29 @@ namespace GEP.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CourseId");
+
                     b.HasIndex("UserId");
 
                     b.ToTable("coordenator");
+                });
+
+            modelBuilder.Entity("GEP.Models.Course", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Designação")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Sigla")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Course");
                 });
 
             modelBuilder.Entity("GEP.Models.Professor", b =>
@@ -133,6 +156,9 @@ namespace GEP.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("CourseId")
+                        .HasColumnType("int");
+
                     b.Property<long>("Number")
                         .HasColumnType("bigint");
 
@@ -140,6 +166,8 @@ namespace GEP.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CourseId");
 
                     b.HasIndex("UserId");
 
@@ -383,11 +411,7 @@ namespace GEP.Migrations
                 {
                     b.HasBaseType("GEP.Models.TFC");
 
-                    b.Property<string>("CompanyId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("CompanyId1")
+                    b.Property<int>("CompanyId")
                         .HasColumnType("int");
 
                     b.Property<int>("CompanyRespId")
@@ -397,7 +421,7 @@ namespace GEP.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasIndex("CompanyId1");
+                    b.HasIndex("CompanyId");
 
                     b.HasIndex("CompanyRespId");
 
@@ -440,6 +464,12 @@ namespace GEP.Migrations
 
             modelBuilder.Entity("GEP.Models.Coordenator", b =>
                 {
+                    b.HasOne("GEP.Models.Course", "Course")
+                        .WithMany()
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("GEP.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
@@ -454,6 +484,12 @@ namespace GEP.Migrations
 
             modelBuilder.Entity("GEP.Models.Student", b =>
                 {
+                    b.HasOne("GEP.Models.Course", "Course")
+                        .WithMany()
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("GEP.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
@@ -514,7 +550,9 @@ namespace GEP.Migrations
                 {
                     b.HasOne("GEP.Models.Company", "Company")
                         .WithMany()
-                        .HasForeignKey("CompanyId1");
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("GEP.Models.CompanyResp", "CompanyResp")
                         .WithMany()

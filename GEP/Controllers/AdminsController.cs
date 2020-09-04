@@ -8,21 +8,20 @@ using Microsoft.EntityFrameworkCore;
 using GEP.Data;
 using GEP.Models;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Authorization;
 using GEP.Helpers;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity.UI.Services;
-using Microsoft.Extensions.Options;
-using GEP.ViewModels;
 using Microsoft.AspNetCore.WebUtilities;
 using System.Text;
 using System.Text.Encodings.Web;
+using Microsoft.Extensions.Options;
+using GEP.ViewModels;
 
 namespace GEP.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class StudentsController : ControllerBase
+    public class AdminsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<User> _userManager;
@@ -30,7 +29,7 @@ namespace GEP.Controllers
         private readonly IMapper _mapper;
         private readonly IEmailSender _emailSender;
 
-        public StudentsController(ApplicationDbContext context,
+        public AdminsController(ApplicationDbContext context,
             UserManager<User> userManager,
             IMapper mapper,
             IOptions<ApplicationSettings> appSettings,
@@ -43,40 +42,70 @@ namespace GEP.Controllers
             _emailSender = emailSender;
         }
 
-        // GET: api/Students
+        // GET: api/Admins
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Student>>> GetStudents()
+        public async Task<ActionResult<IEnumerable<Admin>>> GetAdmins()
         {
-            List<Student> students = await _context.Students.ToListAsync();
-            foreach (Student s in students)
+            List<Admin> admins = await _context.Admins.ToListAsync();
+            foreach (Admin s in admins)
             {
                 s.User = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == s.UserId);
-                s.Course = await _context.Course.FindAsync(s.CourseId);
             }
-            return students;
+            return admins;
         }
 
-        // GET: api/Students/5
+        // GET: api/Admins/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Student>> GetStudent(int id)
+        public async Task<ActionResult<Admin>> GetAdmin(int id)
         {
-            var student = await _context.Students.FindAsync(id);
-            student.User = await _userManager.Users.FirstOrDefaultAsync(m => m.Id == student.UserId);
-            student.Course = await _context.Course.FindAsync(student.CourseId);
+            var admin = await _context.Admins.FindAsync(id);
+            admin.User = await _userManager.Users.FirstOrDefaultAsync(m => m.Id == admin.UserId);
 
-            if (student == null)
+            if (admin == null)
             {
                 return NotFound();
             }
 
-            return student;
+            return admin;
         }
 
-        // POST: api/Students
+        // PUT: api/Admins/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to, for
+        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutAdmin(int id, Admin admin)
+        {
+            if (id != admin.Id)
+            {
+                return BadRequest();
+            }
+
+            _context.Entry(admin).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!AdminExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
+
+        // POST: api/Admins
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<User>> PostStudent([FromBody] RegistrationStudentsViewModel model)
+        public async Task<ActionResult<User>> PostAdmin([FromBody] RegistrationAdminViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -85,18 +114,16 @@ namespace GEP.Controllers
 
             User userIdentity = _mapper.Map<User>(model);
             var result = await _userManager.CreateAsync(userIdentity, "12345678jJ");
-            await _userManager.AddToRoleAsync(userIdentity, "Estudante");
+            await _userManager.AddToRoleAsync(userIdentity, "Admin");
 
             if (!result.Succeeded) return new BadRequestObjectResult(Errors.AddErrorsToModelState(result, ModelState));
 
-            Student newStudent = new Student()
+            Admin newAdmin = new Admin()
             {
-                User = userIdentity,
-                Number = model.Number,
-                Course =  _context.Course.First(c => c.Id == model.CourseId)
+                User = userIdentity
             };
 
-            await _context.Students.AddAsync(newStudent);
+            await _context.Admins.AddAsync(newAdmin);
             await _context.SaveChangesAsync();
 
             var code = await _userManager.GenerateEmailConfirmationTokenAsync(userIdentity);
@@ -107,7 +134,7 @@ namespace GEP.Controllers
             await _emailSender.SendEmailAsync(userIdentity.Email, "ConfirmarConta", $"Clique <a href={HtmlEncoder.Default.Encode(link)}>aqui</a> para confirmar a sua conta!");
 
 
-            return Ok(newStudent);
+            return Ok(newAdmin);
         }
 
         [HttpGet]
@@ -137,61 +164,29 @@ namespace GEP.Controllers
             return BadRequest("Erro");
         }
 
-        // PUT: api/Students/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutStudent(int id, Student student)
-        {
-            if (id != student.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(student).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!StudentExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        // DELETE: api/Students/5
+        // DELETE: api/Admins/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Student>> DeleteStudent(int id)
+        public async Task<ActionResult<Admin>> DeleteAdmin(int id)
         {
-            var student = await _context.Students.FindAsync(id);
-            var user = await _userManager.Users.FirstOrDefaultAsync(m => m.Id == student.UserId);
+            var admin = await _context.Admins.FindAsync(id);
+            var user = await _userManager.Users.FirstOrDefaultAsync(m => m.Id == admin.UserId);
 
-            if (student == null)
+            if (admin == null)
             {
                 return NotFound();
             }
 
-            _context.Students.Remove(student);
+            _context.Admins.Remove(admin);
 
             await _userManager.DeleteAsync(user);
             await _context.SaveChangesAsync();
 
-            return student;
+            return admin;
         }
 
-        private bool StudentExists(int id)
+        private bool AdminExists(int id)
         {
-            return _context.Students.Any(e => e.Id == id);
+            return _context.Admins.Any(e => e.Id == id);
         }
     }
 }
