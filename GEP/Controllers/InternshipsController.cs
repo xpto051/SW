@@ -79,7 +79,7 @@ namespace GEP.Controllers
             return NoContent();
         }
 
-
+        /*
         [HttpPost]
         [Authorize(Roles = "Admin,ResponsavelEmpresa")]
         [Route("proposeIntership")]
@@ -88,7 +88,10 @@ namespace GEP.Controllers
         {
             string userId = User.Claims.First(c => c.Type == "UserID").Value;
             var user = await _userManager.FindByIdAsync(userId);
-        }
+            var resp = await _context.CompaniesResp.FirstAsync(c => c.UserId == user.Id);
+
+
+        } */
 
         // POST: api/Internships
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
