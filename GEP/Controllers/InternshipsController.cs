@@ -7,7 +7,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using GEP.Data;
 using GEP.Models;
-using GEP.ViewModels.TFCs;
+using Microsoft.AspNetCore.Identity;
+using GEP.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GEP.Controllers
 {
@@ -16,10 +18,12 @@ namespace GEP.Controllers
     public class InternshipsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<User> _userManager;
 
-        public InternshipsController(ApplicationDbContext context)
+        public InternshipsController(ApplicationDbContext context,UserManager<User> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: api/Internships
@@ -73,6 +77,17 @@ namespace GEP.Controllers
             }
 
             return NoContent();
+        }
+
+
+        [HttpPost]
+        [Authorize(Roles = "Admin,ResponsavelEmpresa")]
+        [Route("proposeIntership")]
+        //POST : /api/Interships/proposeIntership
+        public async Task<ActionResult<Internships>> PorposeIntership(IntershipModel model)
+        {
+            string userId = User.Claims.First(c => c.Type == "UserID").Value;
+            var user = await _userManager.FindByIdAsync(userId);
         }
 
         // POST: api/Internships

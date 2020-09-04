@@ -4,15 +4,13 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace GEP.ViewModels.UserUpdates
+namespace GEP.ViewModels
 {
     public class CompanyRespPutViewModel
     {
-        [Required]
         [Display(Name = "Primeiro Nome")]
         public string FirstName { get; set; }
 
-        [Required]
         [Display(Name = "Ultimo Nome")]
         public string LastName { get; set; }
 

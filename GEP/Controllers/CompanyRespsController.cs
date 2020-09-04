@@ -16,6 +16,7 @@ using GEP.ViewModels;
 using Microsoft.AspNetCore.WebUtilities;
 using System.Text;
 using System.Text.Encodings.Web;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GEP.Controllers
 {
@@ -109,17 +110,50 @@ namespace GEP.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCompanyResp(int id, CompanyResp companyResp)
+        [Authorize]
+        public async Task<IActionResult> PutCompanyResp(int id, [FromBody] CompanyRespPutViewModel model)
         {
-            if (id != companyResp.Id)
+            string userId = User.Claims.First(c => c.Type == "UserID").Value;
+            var user = await _userManager.FindByIdAsync(userId);
+            var resp = await _context.CompaniesResp.FirstAsync(c => c.UserId == user.Id);
+
+            if ((model.NewPassword != null && model.ConfirmNewPassword == null) || model.NewPassword != model.ConfirmNewPassword)
             {
-                return BadRequest();
+                return BadRequest("Please match the confirmNewpassword with newPassword");
             }
 
-            _context.Entry(companyResp).State = EntityState.Modified;
+            if(model.Password != null)
+            {
+                if(!await _userManager.CheckPasswordAsync(user, model.Password))
+                {
+                    return BadRequest("Wrong password entered");
+                }
+
+            }
+
+            if(model.PhoneNumber != null)
+            {
+                user.PhoneNumber = model.PhoneNumber;
+            }
+
+            if(model.FirstName != null)
+            {
+                user.FirstName = model.FirstName;
+            }
+
+            if(model.LastName != null)
+            {
+                user.LastName = model.LastName;
+            }
+
+            if(model.NewPassword != null && (model.NewPassword == model.ConfirmNewPassword))
+            {
+                await _userManager.ChangePasswordAsync(user, model.Password, model.NewPassword);
+            }
+
             try
             {
-                await _context.SaveChangesAsync();
+                await _userManager.UpdateAsync(user);
             }
             catch (DbUpdateConcurrencyException)
             {
