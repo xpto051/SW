@@ -120,6 +120,7 @@ namespace GEP.Controllers
 
             if (!result.Succeeded) return new BadRequestObjectResult(Errors.AddErrorsToModelState(result, ModelState));
 
+
             Coordenator newCoordenator = new Coordenator()
             {
                 User = userIdentity,

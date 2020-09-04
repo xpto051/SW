@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GEP.Models
 {
-    
+    [Table("Projects")]
     public class Project : TFC
     {
         public string Theme { get; set; }

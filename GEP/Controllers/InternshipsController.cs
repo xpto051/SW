@@ -30,7 +30,13 @@ namespace GEP.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Internships>>> GetInternships()
         {
-            return await _context.Internships.ToListAsync();
+            List<Internships> internShipList =  await _context.TFCs.OfType<Internships>().ToListAsync();
+            foreach (Internships i in internShipList)
+            {
+                i.CompanyResp = await _context.CompaniesResp.FirstOrDefaultAsync(u => u.Id == i.CompanyRespId);
+                i.Company = await _context.Company.FirstOrDefaultAsync(c => c.Id == i.CompanyId);
+            }
+            return internShipList;
         }
 
         // GET: api/Internships/5
@@ -79,19 +85,35 @@ namespace GEP.Controllers
             return NoContent();
         }
 
-        /*
+        
         [HttpPost]
         [Authorize(Roles = "Admin,ResponsavelEmpresa")]
-        [Route("proposeIntership")]
-        //POST : /api/Interships/proposeIntership
-        public async Task<ActionResult<Internships>> PorposeIntership(IntershipModel model)
+        [Route("proposeInternship")]
+        //POST : /api/Internships/proposeInternship
+        public async Task<ActionResult<Internships>> ProposeInternship(IntershipModel model)
         {
             string userId = User.Claims.First(c => c.Type == "UserID").Value;
             var user = await _userManager.FindByIdAsync(userId);
             var resp = await _context.CompaniesResp.FirstAsync(c => c.UserId == user.Id);
 
+            Company comp = await _context.Company.FindAsync(resp.CompanyId);
 
-        } */
+            Internships newInternship = new Internships()
+            {
+                Description = model.Description,
+                Role = model.Role,
+                Vagas = model.Vagas,
+                CompanyResp = resp,
+                Company = comp,
+                Aceite = false,
+                Proposta = true
+            };
+
+            await _context.TFCs.AddAsync(newInternship);
+            await _context.SaveChangesAsync();
+            return Ok(newInternship);
+
+        } 
 
         // POST: api/Internships
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
@@ -105,8 +127,6 @@ namespace GEP.Controllers
                 return BadRequest(ModelState);
             }
 
-            CompanyResp cr = await _context.CompaniesResp.FindAsync(model.CompanyRespId);
-            Company c = await _context.Company.FindAsync(cr.CompanyId);
 
             Internships i = new Internships()
             {
@@ -114,14 +134,12 @@ namespace GEP.Controllers
                 Proposta = true,
                 Aceite = false,
                 Description = model.Description,
-                Role = model.Role,               
-                CompanyResp = cr, //await _context.CompaniesResp.FindAsync(model.CompanyRespId),
-                Company = c,
+                Role = model.Role,   
                 //CompanyId = c.Id
 
             };
 
-            _context.Internships.Add(i);
+            _context.TFCs.Add(i);
             await _context.SaveChangesAsync();
 
             return Ok( i);

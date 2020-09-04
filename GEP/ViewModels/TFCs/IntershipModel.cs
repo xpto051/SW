@@ -10,7 +10,6 @@ namespace GEP.ViewModels
     {
         public int Vagas { get; set; }
         public string Role { get; set; }
-        public int CompanyRespId { get; set; }
         public string Description { get; set; }
     }
 }

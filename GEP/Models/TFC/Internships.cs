@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 namespace GEP.Models
 {
     
+    [Table("InternShip")]
     public class Internships : TFC
     {
        

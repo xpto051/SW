@@ -118,6 +118,8 @@ namespace GEP.Controllers
 
             if (!result.Succeeded) return new BadRequestObjectResult(Errors.AddErrorsToModelState(result, ModelState));
 
+            
+
             Admin newAdmin = new Admin()
             {
                 User = userIdentity

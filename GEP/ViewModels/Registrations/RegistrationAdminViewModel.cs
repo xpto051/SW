@@ -10,5 +10,11 @@ namespace GEP.ViewModels
     {
         [Required]
         public string Email { get; set; }
+
+        [Display(Name = "Primeiro Nome")]
+        public string FirstName { get; set; }
+
+        [Display(Name = "Ultimo Nome")]
+        public string LastName { get; set; }
     }
 }

@@ -110,7 +110,7 @@ namespace GEP.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        [Authorize]
+        [Authorize(Roles = "ResponsavelEmpresa, Admin")]
         public async Task<IActionResult> PutCompanyResp(int id, [FromBody] CompanyRespPutViewModel model)
         {
             string userId = User.Claims.First(c => c.Type == "UserID").Value;

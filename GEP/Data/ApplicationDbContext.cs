@@ -23,7 +23,6 @@ namespace GEP.Data
         public DbSet<Coordenator> Coordenators{ get; set; }
 
         public DbSet<Company> Company { get; set; }
-        public DbSet<Project> Projects { get; set; }
         public DbSet<Internships> Internships { get; set; }
         public DbSet<TFC> TFCs { get; set; }
         public DbSet<Course> Course { get; set; }
