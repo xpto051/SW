@@ -53,11 +53,8 @@
   <ul class="nav">
     <div class="LiItems">
       <li [routerLinkActive]="['link-active']">
-        <img
-          class="logo"
-          src="../../../assets/img/Logótipo_do_Instituto_Politécnico_de_Setúbal.png"
-          [routerLink]="['/gep/home']"
-        />
+        <img class="logo" src="../../../assets/img/Logótipo_do_Instituto_Politécnico_de_Setúbal.png"
+          [routerLink]="['/gep/home']" />
       </li>
       <li [routerLinkActive]="['link-active']" class="dropdown">
         <section class="ItemSection" [routerLink]="['/gep/counter']">
@@ -67,12 +64,8 @@
           <a [routerLink]="['/gep/addUser']">Ver Estágios</a>
           <a href="#" *ngIf="role == 'Estudante'">Meu Estágio</a>
           <a href="#" *ngIf="role == 'Estudante'">Minhas Candidaturas</a>
-          <a href="#" *ngIf="role == 'Admin' || role == 'Coordenador'"
-            >Propostas de Estágio</a
-          >
-          <a href="#" *ngIf="role == 'Admin' || role == 'Coordenador'"
-            >Adicionar Estágios</a
-          >
+          <a href="#" *ngIf="role == 'Admin' || role == 'Coordenador'">Propostas de Estágio</a>
+          <a href="#" *ngIf="role == 'Admin' || role == 'Coordenador'">Adicionar Estágios</a>
         </div>
       </li>
       <div class="Separator"></div>
@@ -84,16 +77,10 @@
           <a [routerLink]="['/gep/addUser']">Ver Projectos</a>
           <a href="#" *ngIf="role == 'Estudante'">Meu Projecto</a>
           <a href="#" *ngIf="role == 'Estudante'">Minhas Candidaturas</a>
-          <a href="#" *ngIf="role == 'Admin' || role == 'Coordenador'"
-            >Propostas de Projecto</a
-          >
-          <a
-            href="#"
-            *ngIf="
+          <a href="#" *ngIf="role == 'Admin' || role == 'Coordenador'">Propostas de Projecto</a>
+          <a href="#" *ngIf="
               role == 'Admin' || role == 'Coordenador' || role == 'Docente'
-            "
-            >Adicionar Projectos</a
-          >
+            ">Adicionar Projectos</a>
         </div>
       </li>
       <div class="Separator"></div>
@@ -111,18 +98,12 @@
           Empresas
         </section>
         <div class="dropdown-content">
-          <a [routerLink]="['/gep/addUser']">Ver Empresas</a>
-          <a href="#" *ngIf="role == 'Admin' || role == 'Coordenador'"
-            >Adicionar Empresas</a
-          >
+          <a [routerLink]="['/gep/viewCompanies']">Ver Empresas</a>
+          <a href="#" *ngIf="role == 'Admin' || role == 'Coordenador'">Adicionar Empresas</a>
         </div>
       </li>
       <div class="Separator"></div>
-      <li
-        [routerLinkActive]="['link-active']"
-        *ngIf="role == 'Admin'"
-        class="dropdown"
-      >
+      <li [routerLinkActive]="['link-active']" *ngIf="role == 'Admin'" class="dropdown">
         <section class="ItemSection" [routerLink]="['/gep/fetch-data']">
           Gerir Utilizadores
         </section>
@@ -143,11 +124,7 @@
           <section>{{ role }}</section>
         </div>
         <div class="Container dropdown">
-          <img
-            class="Img"
-            src="https://ucc.edu.gh/sites/default/files/default_images/img_avatar_0.png"
-            alt="avatar"
-          />
+          <img class="Img" src="https://ucc.edu.gh/sites/default/files/default_images/img_avatar_0.png" alt="avatar" />
           <div class="dropdown-content-profile">
             <a [routerLink]="['/gep/settings']">Definições</a>
             <a role="button" (click)="onLogout()">Sair</a>
