@@ -13,7 +13,7 @@ import {
   MatIconModule,
   MatTableModule,
   MatDialogModule,
-  MAT_DIALOG_DEFAULT_OPTIONS
+  MAT_DIALOG_DEFAULT_OPTIONS,
 } from "@angular/material";
 
 import { AppComponent } from "./app.component";
@@ -30,8 +30,17 @@ import { AuthInterceptor } from "./auth/auth.interceptor";
 import { AddUserComponent } from "./main/add-user/add-user.component";
 import { ForbiddenComponent } from "./main/forbidden/forbidden.component";
 import { UserSettingsComponent } from "./main/user-settings/user-settings.component";
-import { CompanyDetailsComponent } from './main/company-details/company-details.component';
-import { DialogCompanyComponent } from './main/components/dialog-company/dialog-company.component';
+import { CompanyDetailsComponent } from "./main/company-details/company-details.component";
+import { DialogCompanyComponent } from "./main/components/dialog-company/dialog-company.component";
+import { StudentsListComponent } from "./main/students-list/students-list.component";
+import { PerfectScrollbarModule } from "ngx-perfect-scrollbar";
+import { PERFECT_SCROLLBAR_CONFIG } from "ngx-perfect-scrollbar";
+import { PerfectScrollbarConfigInterface } from "ngx-perfect-scrollbar";
+
+const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
+  suppressScrollX: true,
+  wheelPropagation: true,
+};
 
 @NgModule({
   declarations: [
@@ -47,6 +56,7 @@ import { DialogCompanyComponent } from './main/components/dialog-company/dialog-
     UserSettingsComponent,
     CompanyDetailsComponent,
     DialogCompanyComponent,
+    StudentsListComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: "ng-cli-universal" }),
@@ -62,6 +72,7 @@ import { DialogCompanyComponent } from './main/components/dialog-company/dialog-
     MatTableModule,
     MatDialogModule,
     BrowserAnimationsModule,
+    PerfectScrollbarModule,
     ToastrModule.forRoot({
       positionClass: "toast-top-right",
       preventDuplicates: true,
@@ -84,6 +95,7 @@ import { DialogCompanyComponent } from './main/components/dialog-company/dialog-
             canActivate: [AuthGuard],
             data: { permittedRoles: ["Admin"] },
           },
+          { path: "viewStudents", component: StudentsListComponent },
           { path: "viewCompanies", component: CompanyDetailsComponent },
           { path: "settings", component: UserSettingsComponent },
         ],
@@ -92,16 +104,20 @@ import { DialogCompanyComponent } from './main/components/dialog-company/dialog-
   ],
   providers: [
     {
+      provide: PERFECT_SCROLLBAR_CONFIG,
+      useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG,
+    },
+    {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
       multi: true,
     },
     {
       provide: MAT_DIALOG_DEFAULT_OPTIONS,
-      useValue: { hasBackdrop: false }
-    }
+      useValue: { hasBackdrop: false },
+    },
   ],
   bootstrap: [AppComponent],
-  entryComponents: []
+  entryComponents: [],
 })
-export class AppModule { }
+export class AppModule {}

@@ -20,8 +20,8 @@ export class DialogCompanyComponent implements OnInit {
 
 }
 
-@Component({
+/*@Component({
   selector: 'dialog-elements-example-dialog',
   templateUrl: 'dialog-elements-example-dialog.html',
-})
+})*/
 export class DialogElementsExampleDialog { }
