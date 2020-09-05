@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using GEP.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using GEP.Models.Notifications;
+using GEP.Models.File;
 
 namespace GEP.Data
 {
@@ -26,6 +28,7 @@ namespace GEP.Data
         public DbSet<Internships> Internships { get; set; }
         public DbSet<TFC> TFCs { get; set; }
         public DbSet<Course> Course { get; set; }
-
+        public DbSet<GEP.Models.Notifications.Notification> Notification { get; set; }
+        public DbSet<GEP.Models.File.File> File { get; set; }
     }
 }

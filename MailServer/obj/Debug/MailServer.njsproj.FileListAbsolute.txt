@@ -6,3 +6,6 @@ D:\Code\EI\SW\SWproject\SW\MailServer\bin\Microsoft.NodejsTools.WebRole.dll
 C:\Users\netro\OneDrive\Ambiente de Trabalho\SW\MailServer\obj\Debug\MailServer.njsprojAssemblyReference.cache
 C:\Users\netro\OneDrive\Ambiente de Trabalho\SW\MailServer\bin\Microsoft.NodejsTools.WebRole.dll
 D:\Code\EI\SW\SWproject\SW\MailServer\obj\Debug\MailServer.njsprojAssemblyReference.cache
+C:\Users\gonga\Documents\GitHub\SW\MailServer\obj\Debug\MailServer.njsprojAssemblyReference.cache
+C:\Users\gonga\Documents\GitHub\SW\MailServer\obj\Debug\MailServer.njsproj.CoreCompileInputs.cache
+C:\Users\gonga\Documents\GitHub\SW\MailServer\bin\Microsoft.NodejsTools.WebRole.dll
