@@ -33,8 +33,11 @@ export class StudentsListComponent implements OnInit {
   ) {
     http.get<Student[]>(baseUrl + 'api/students').subscribe(
       result => {
-        this.dataSource = new MatTableDataSource(result);
-        console.log(result);
+        var final = [];
+        result.forEach(element => {
+          if (element.user.emailConfirmed) final.push(element)
+        });
+        this.dataSource = new MatTableDataSource(final);
       },
       error => console.error('error')
     );
@@ -65,4 +68,5 @@ interface Course {
 interface User {
   name: string;
   email: string;
+  emailConfirmed: boolean;
 }

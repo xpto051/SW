@@ -24,7 +24,7 @@ export class AddUserComponent implements OnInit {
     private http: HttpClient,
     @Inject("BASE_URL") private baseUrl: string,
     private toastr: ToastrService
-  ) {}
+  ) { }
 
   createMyObject() {
     this.estudanteForm.setValue({
