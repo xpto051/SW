@@ -30,19 +30,79 @@ export class UserSettingsComponent implements OnInit {
   }
 
   putRespUser(formData: CompanyRespDetails) {
-    var url = this.baseUrl + "api/CompanyResps";
+    var url = this.baseUrl;
     var token = new HttpHeaders({
       Authorization: "Bearer " + localStorage.getItem("token"),
     });
-    return this.http.put(url, formData, { headers: token }).subscribe(
-      (res) => {
-        this.resetForm();
-        this.toastr.success("Perfil atualizado com sucesso");
-      },
-      (err) => {
-        console.log(err);
-      }
-    );
+    console.log(this.role);
+    if (this.role == "ResponsavelEmpresa") {
+      return this.http
+        .put(`${url}api/CompanyResps`, formData, { headers: token })
+        .subscribe(
+          () => {
+            this.resetForm();
+            this.toastr.success("Perfil atualizado com sucesso");
+          },
+          (err) => {
+            console.log(err);
+          }
+        );
+    }
+    if (this.role == "Admin") {
+      return this.http
+        .put(`${url}api/Admins`, formData, { headers: token })
+        .subscribe(
+          (res) => {
+            this.resetForm();
+            this.toastr.success("Perfil atualizado com sucesso");
+          },
+          (err) => {
+            console.log(err);
+          }
+        );
+    }
+
+    if (this.role == "Estudante") {
+      return this.http
+        .put(`${url}api/Students`, formData, { headers: token })
+        .subscribe(
+          (res) => {
+            this.resetForm();
+            this.toastr.success("Perfil atualizado com sucesso");
+          },
+          (err) => {
+            console.log(err);
+          }
+        );
+    }
+
+    if (this.role == "Docente") {
+      return this.http
+        .put(`${url}api/Professors`, formData, { headers: token })
+        .subscribe(
+          (res) => {
+            this.resetForm();
+            this.toastr.success("Perfil atualizado com sucesso");
+          },
+          (err) => {
+            console.log(err);
+          }
+        );
+    }
+
+    if (this.role == "Coordenador") {
+      return this.http
+        .put(`${url}api/Coordenators`, formData, { headers: token })
+        .subscribe(
+          (res) => {
+            this.resetForm();
+            this.toastr.success("Perfil atualizado com sucesso");
+          },
+          (err) => {
+            console.log(err);
+          }
+        );
+    }
   }
 
   onSubmit(form: NgForm) {
@@ -53,7 +113,27 @@ export class UserSettingsComponent implements OnInit {
   }
 
   resetForm(form?: NgForm) {
-    var url = this.baseUrl + "api/CompanyResps/myDetails";
+    var rota;
+    switch (this.role) {
+      case "Admin":
+        rota = "admins";
+        break;
+      case "Estudante":
+        rota = "Students";
+        break;
+      case "Docente":
+        rota = "Professors";
+        break;
+      case "Coordenador":
+        rota = "Coordenators";
+      case "ResponsavelEmpresa":
+        rota = "CompanyResps";
+      default:
+        break;
+    }
+
+    console.log(rota);
+    var url = `${this.baseUrl}api/${rota}/myDetails`;
     var token = new HttpHeaders({
       Authorization: "Bearer " + localStorage.getItem("token"),
     });
