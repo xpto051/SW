@@ -104,8 +104,7 @@ namespace GEP.Controllers
 
             var link = Url.Action("ConfirmEmail", "User", new { userId = userIdentity.Id, code }, Request.Scheme);
 
-            await _emailSender.SendEmailAsync(userIdentity.Email, "ConfirmarConta", $"Clique <a href={HtmlEncoder.Default.Encode(link)}>aqui</a> para confirmar a sua conta!");
-
+            await _emailSender.SendEmailAsync(userIdentity.Email, "ConfirmarConta", $"Clique <a href={HtmlEncoder.Default.Encode(link)}>aqui</a> para confirmar a sua conta! <br> A sua password é: 12345678jJ");
 
             return Ok(newStudent);
         }
@@ -137,22 +136,79 @@ namespace GEP.Controllers
             return BadRequest("Erro");
         }
 
-        // PUT: api/Students/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutStudent(int id, Student student)
+        //GET: api/Students/myDetails
+        [HttpGet]
+        [Route("myDetails")]
+        [Authorize(Roles = "Estudante")]
+        public async Task<Object> GetMyDetails()
         {
-            if (id != student.Id)
+            string userId = User.Claims.First(c => c.Type == "UserID").Value;
+            var user = await _userManager.FindByIdAsync(userId);
+            var st = await _context.Students.FirstAsync(c => c.UserId == user.Id);
+
+            if (StudentExists(st.Id))
+            {
+                return new
+                {
+                    st.User.FirstName,
+                    st.User.LastName,
+                    st.User.PhoneNumber
+                };
+            }
+            else
             {
                 return BadRequest();
             }
+        }
 
-            _context.Entry(student).State = EntityState.Modified;
+        // PUT: api/Students
+        // To protect from overposting attacks, enable the specific properties you want to bind to, for
+        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
+        [HttpPut]
+        [Authorize(Roles = "Estudante")]
+        public async Task<IActionResult> PutEstudante(int id, [FromBody] CompanyRespPutViewModel model)
+        {
+            string userId = User.Claims.First(c => c.Type == "UserID").Value;
+            var user = await _userManager.FindByIdAsync(userId);
+            var st = await _context.Students.FirstAsync(c => c.UserId == user.Id);
+
+            if ((model.NewPassword != null && model.ConfirmNewPassword == null) || model.NewPassword != model.ConfirmNewPassword)
+            {
+                return BadRequest("Please match the confirmNewpassword with newPassword");
+            }
+
+            if (model.Password != null)
+            {
+                if (!await _userManager.CheckPasswordAsync(user, model.Password))
+                {
+                    return BadRequest("Wrong password entered");
+                }
+
+            }
+
+            if (model.PhoneNumber != null)
+            {
+                user.PhoneNumber = model.PhoneNumber;
+            }
+
+            if (model.FirstName != null)
+            {
+                user.FirstName = model.FirstName;
+            }
+
+            if (model.LastName != null)
+            {
+                user.LastName = model.LastName;
+            }
+
+            if (model.NewPassword != null && (model.NewPassword == model.ConfirmNewPassword))
+            {
+                await _userManager.ChangePasswordAsync(user, model.Password, model.NewPassword);
+            }
 
             try
             {
-                await _context.SaveChangesAsync();
+                await _userManager.UpdateAsync(user);
             }
             catch (DbUpdateConcurrencyException)
             {
