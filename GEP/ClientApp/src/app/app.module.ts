@@ -36,6 +36,7 @@ import { AddCompanyComponent } from './main/add-company/add-company.component';
 import { AddDocenteComponent } from './main/add-docente/add-docente.component';
 import { AddResponsableComponent } from './main/add-responsable/add-responsable.component';
 import { AddCoordinatorComponent } from './main/add-coordinator/add-coordinator.component';
+import { ViewInternshipsComponent } from './main/view-internships/view-internships.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
@@ -60,6 +61,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     AddDocenteComponent,
     AddResponsableComponent,
     AddCoordinatorComponent,
+    ViewInternshipsComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: "ng-cli-universal" }),
@@ -123,6 +125,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
             canActivate: [AuthGuard],
             data: { permittedRoles: ["Admin"] },
           },
+          { path: "viewInternships", component: ViewInternshipsComponent },
           { path: "viewStudents", component: StudentsListComponent },
           { path: "viewCompanies", component: CompanyDetailsComponent },
           { path: "settings", component: UserSettingsComponent },
