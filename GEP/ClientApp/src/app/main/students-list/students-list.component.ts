@@ -9,7 +9,13 @@ import { PerfectScrollbarConfigInterface } from "ngx-perfect-scrollbar";
 export class StudentsListComponent implements OnInit {
   public config: PerfectScrollbarConfigInterface = {};
 
+  public disabled: boolean = true;
+
   constructor() {}
+
+  public toggleDisabled(): void {
+    this.disabled = !this.disabled;
+  }
 
   ngOnInit() {}
 }

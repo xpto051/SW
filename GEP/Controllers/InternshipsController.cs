@@ -20,7 +20,7 @@ namespace GEP.Controllers
         private readonly ApplicationDbContext _context;
         private readonly UserManager<User> _userManager;
 
-        public InternshipsController(ApplicationDbContext context,UserManager<User> userManager)
+        public InternshipsController(ApplicationDbContext context, UserManager<User> userManager)
         {
             _context = context;
             _userManager = userManager;
@@ -30,7 +30,7 @@ namespace GEP.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Internships>>> GetInternships()
         {
-            List<Internships> internShipList =  await _context.TFCs.OfType<Internships>().ToListAsync();
+            List<Internships> internShipList = await _context.TFCs.OfType<Internships>().ToListAsync();
             foreach (Internships i in internShipList)
             {
                 i.CompanyResp = await _context.CompaniesResp.FirstOrDefaultAsync(u => u.Id == i.CompanyRespId);
@@ -38,6 +38,75 @@ namespace GEP.Controllers
             }
             return internShipList;
         }
+
+        [HttpGet]
+        [Route("proposeInternship")]
+        // GET: api/Internships/proposeInternship
+        public async Task<ActionResult<IEnumerable<Internships>>> GetProposeInternship()
+        {
+            List<Internships> internShipList = await _context.TFCs.OfType<Internships>().Where(c => c.Proposta == true).ToListAsync();
+            foreach (Internships i in internShipList)
+            {
+                i.CompanyResp = await _context.CompaniesResp.FirstOrDefaultAsync(u => u.Id == i.CompanyRespId);
+                i.Company = await _context.Company.FirstOrDefaultAsync(c => c.Id == i.CompanyId);
+            }
+            return internShipList;
+        }
+
+        [HttpPut]
+        [Route("acceptPropose/{id}")]
+        // PUT: api/Internships/acceptPropose/1
+        public async Task<IActionResult> PutAcceptPropose(int id)
+        {
+            
+            Internships i = await _context.TFCs.OfType<Internships>().FirstOrDefaultAsync(i => i.ID == id);
+            if(i.Proposta == false)
+            {
+                return BadRequest("This internship is not a proposed internship so u cant accept it");
+            }
+            i.Aceite = true;
+            i.Proposta = false;
+
+            _context.Update(i);
+            await _context.SaveChangesAsync();
+
+            return Ok(i);
+        }
+
+        [HttpPut]
+        [Route("rejectPropose/{id}")]
+        // PUT: api/Internships/rejectPropose/1
+        public async Task<IActionResult> PutRejectPropose(int id)
+        {
+
+            Internships i = await _context.TFCs.OfType<Internships>().FirstOrDefaultAsync(i => i.ID == id);
+            if (i.Proposta == false)
+            {
+                return BadRequest("This internship is not a proposed internship so u cant accept it");
+            }
+            i.Aceite = false;
+            i.Proposta = false;
+
+            _context.Update(i);
+            await _context.SaveChangesAsync();
+
+            return Ok(i);
+        }
+
+        [HttpGet]
+        [Route("availableInternships")]
+        // GET: api/Internships/availableInternships
+        public async Task<ActionResult<IEnumerable<Internships>>> GetAvailableInternship()
+        {
+            List<Internships> internShipList = await _context.TFCs.OfType<Internships>().Where(c => c.Proposta == false && c.Aceite == true).ToListAsync();
+            foreach (Internships i in internShipList)
+            {
+                i.CompanyResp = await _context.CompaniesResp.FirstOrDefaultAsync(u => u.Id == i.CompanyRespId);
+                i.Company = await _context.Company.FirstOrDefaultAsync(c => c.Id == i.CompanyId);
+            }
+            return internShipList;
+        }
+
 
         // GET: api/Internships/5
         [HttpGet("{id}")]

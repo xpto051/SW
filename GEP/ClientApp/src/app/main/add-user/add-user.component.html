@@ -1,0 +1,47 @@
+<mat-tab-group mat-align-tabs="center">
+  <mat-tab label="Adicionar Estudante">
+    <form
+      #form="ngForm"
+      class="example-container"
+      (ngSubmit)="onSubmit()"
+      [formGroup]="estudanteForm"
+    >
+      <mat-form-field appearance="fill">
+        <mat-label>Email do Utilizador</mat-label>
+        <input
+          matInput
+          formControlName="email"
+          placeholder="pat@example.com"
+          required
+        />
+        <mat-error *ngIf="email.invalid">{{ getErrorMessage() }}</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Primeiro Nome</mat-label>
+        <input matInput formControlName="firstName" placeholder="ex: António" />
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Ultimo nome</mat-label>
+        <input matInput formControlName="lastName" placeholder="ex: Antunes" />
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Numero</mat-label>
+        <input matInput formControlName="number" placeholder="ex: 160221033" />
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Curso</mat-label>
+        <mat-select formControlName="CourseId">
+          <mat-option *ngFor="let v of courses" [value]="v.id">{{
+            v.designacao
+          }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <button class="AddStudent" type="submit" mat-button>
+        Adicionar Estudante
+      </button>
+    </form>
+  </mat-tab>
+  <mat-tab label="Lista de Estudantes">
+    <ng-template matTabContent> Content 2 - Loaded: </ng-template>
+  </mat-tab>
+</mat-tab-group>
