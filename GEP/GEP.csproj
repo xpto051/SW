@@ -51,6 +51,8 @@
     <Compile Remove="Migrations\20200903172407_initail.Designer.cs" />
     <Compile Remove="Migrations\20200904173118_TFCupdate.cs" />
     <Compile Remove="Migrations\20200904173118_TFCupdate.Designer.cs" />
+    <Compile Remove="Migrations\20200907153542_userTFC.cs" />
+    <Compile Remove="Migrations\20200907153542_userTFC.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

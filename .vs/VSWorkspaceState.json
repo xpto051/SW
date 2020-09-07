@@ -1,7 +1,12 @@
 {
   "ExpandedNodes": [
     "",
-    "\\GEP"
+    "\\GEP",
+    "\\GEP\\Controllers",
+    "\\GEP\\Models",
+    "\\GEP\\Models\\TFC",
+    "\\GEP\\Models\\Users"
   ],
+  "SelectedNode": "\\GEP\\Models",
   "PreviewInSolutionExplorer": false
 }

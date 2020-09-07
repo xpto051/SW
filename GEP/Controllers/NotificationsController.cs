@@ -43,6 +43,7 @@ namespace GEP.Controllers
                 return NotFound();
             }
 
+            notification.User = await _context.Users.FindAsync(notification.UserId);
             notification.Seen = true; //quando o user pedir a notificação passa a ser vista
             await _context.SaveChangesAsync();
 
@@ -53,7 +54,7 @@ namespace GEP.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<IEnumerable<Notification>>> GetNotificationByUserId(int id)
         {
-            var notifications = await _context.Notification.Where(n => n.UserId.Equals(id)).ToListAsync(); ;
+            var notifications = await _context.Notification.Where(n => n.UserId.Equals(id)).ToListAsync();
 
             if (notifications == null)
             {
