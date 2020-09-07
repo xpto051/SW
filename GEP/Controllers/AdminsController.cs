@@ -16,6 +16,7 @@ using System.Text;
 using System.Text.Encodings.Web;
 using Microsoft.Extensions.Options;
 using GEP.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GEP.Controllers
 {
@@ -69,22 +70,79 @@ namespace GEP.Controllers
             return admin;
         }
 
-        // PUT: api/Admins/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutAdmin(int id, Admin admin)
+        //GET: api/admins/myDetails
+        [HttpGet]
+        [Route("myDetails")]
+        [Authorize(Roles = "Admin")]
+        public async Task<Object> GetMyDetails()
         {
-            if (id != admin.Id)
+            string userId = User.Claims.First(c => c.Type == "UserID").Value;
+            var user = await _userManager.FindByIdAsync(userId);
+            var admin = await _context.Admins.FirstAsync(c => c.UserId == user.Id);
+
+            if (AdminExists(admin.Id))
+            {
+                return new
+                {
+                    admin.User.FirstName,
+                    admin.User.LastName,
+                    admin.User.PhoneNumber
+                };
+            }
+            else
             {
                 return BadRequest();
             }
+        }
 
-            _context.Entry(admin).State = EntityState.Modified;
+        // PUT: api/Admins
+        // To protect from overposting attacks, enable the specific properties you want to bind to, for
+        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
+        [HttpPut]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> PutAdmin(int id, [FromBody] CompanyRespPutViewModel model)
+        {
+            string userId = User.Claims.First(c => c.Type == "UserID").Value;
+            var user = await _userManager.FindByIdAsync(userId);
+            var admin = await _context.Admins.FirstAsync(c => c.UserId == user.Id);
+
+            if ((model.NewPassword != null && model.ConfirmNewPassword == null) || model.NewPassword != model.ConfirmNewPassword)
+            {
+                return BadRequest("Please match the confirmNewpassword with newPassword");
+            }
+
+            if (model.Password != null)
+            {
+                if (!await _userManager.CheckPasswordAsync(user, model.Password))
+                {
+                    return BadRequest("Wrong password entered");
+                }
+
+            }
+
+            if (model.PhoneNumber != null)
+            {
+                user.PhoneNumber = model.PhoneNumber;
+            }
+
+            if (model.FirstName != null)
+            {
+                user.FirstName = model.FirstName;
+            }
+
+            if (model.LastName != null)
+            {
+                user.LastName = model.LastName;
+            }
+
+            if (model.NewPassword != null && (model.NewPassword == model.ConfirmNewPassword))
+            {
+                await _userManager.ChangePasswordAsync(user, model.Password, model.NewPassword);
+            }
 
             try
             {
-                await _context.SaveChangesAsync();
+                await _userManager.UpdateAsync(user);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -133,7 +191,7 @@ namespace GEP.Controllers
 
             var link = Url.Action("ConfirmEmail", "User", new { userId = userIdentity.Id, code }, Request.Scheme);
 
-            await _emailSender.SendEmailAsync(userIdentity.Email, "ConfirmarConta", $"Clique <a href={HtmlEncoder.Default.Encode(link)}>aqui</a> para confirmar a sua conta!");
+            await _emailSender.SendEmailAsync(userIdentity.Email, "ConfirmarConta", $"Clique <a href={HtmlEncoder.Default.Encode(link)}>aqui</a> para confirmar a sua conta! <br> A sua password é: 12345678jJ");
 
 
             return Ok(newAdmin);

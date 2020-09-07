@@ -16,6 +16,7 @@ using GEP.ViewModels;
 using Microsoft.AspNetCore.WebUtilities;
 using System.Text;
 using System.Text.Encodings.Web;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GEP.Controllers
 {
@@ -70,36 +71,29 @@ namespace GEP.Controllers
 
         }
 
-        // PUT: api/Professors/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutProfessor(int id, Professor professor)
+        //GET: api/Professors/myDetails
+        [HttpGet]
+        [Route("myDetails")]
+        [Authorize(Roles = "Docente")]
+        public async Task<Object> GetMyDetails()
         {
-            if (id != professor.Id)
+            string userId = User.Claims.First(c => c.Type == "UserID").Value;
+            var user = await _userManager.FindByIdAsync(userId);
+            var prof = await _context.Professors.FirstAsync(c => c.UserId == user.Id);
+
+            if (ProfessorExists(prof.Id))
+            {
+                return new
+                {
+                    prof.User.FirstName,
+                    prof.User.LastName,
+                    prof.User.PhoneNumber
+                };
+            }
+            else
             {
                 return BadRequest();
             }
-
-            _context.Entry(professor).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ProfessorExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
         }
 
         // POST: api/Professors
@@ -133,7 +127,7 @@ namespace GEP.Controllers
 
             var link = Url.Action("ConfirmEmail", "User", new { userId = userIdentity.Id, code }, Request.Scheme);
 
-            await _emailSender.SendEmailAsync(userIdentity.Email, "ConfirmarConta", $"Clique <a href={HtmlEncoder.Default.Encode(link)}>aqui</a> para confirmar a sua conta!");
+            await _emailSender.SendEmailAsync(userIdentity.Email, "ConfirmarConta", $"Clique <a href={HtmlEncoder.Default.Encode(link)}>aqui</a> para confirmar a sua conta! <br> A sua password é: 12345678jJ");
 
 
             return Ok(newProf);
@@ -164,6 +158,70 @@ namespace GEP.Controllers
             }
 
             return BadRequest("Erro");
+        }
+
+        // PUT: api/Professors
+        // To protect from overposting attacks, enable the specific properties you want to bind to, for
+        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
+        [HttpPut]
+        [Authorize(Roles = "Docente")]
+        public async Task<IActionResult> PutDocente(int id, [FromBody] CompanyRespPutViewModel model)
+        {
+            string userId = User.Claims.First(c => c.Type == "UserID").Value;
+            var user = await _userManager.FindByIdAsync(userId);
+            var prof = await _context.Professors.FirstAsync(c => c.UserId == user.Id);
+
+            if ((model.NewPassword != null && model.ConfirmNewPassword == null) || model.NewPassword != model.ConfirmNewPassword)
+            {
+                return BadRequest("Please match the confirmNewpassword with newPassword");
+            }
+
+            if (model.Password != null)
+            {
+                if (!await _userManager.CheckPasswordAsync(user, model.Password))
+                {
+                    return BadRequest("Wrong password entered");
+                }
+
+            }
+
+            if (model.PhoneNumber != null)
+            {
+                user.PhoneNumber = model.PhoneNumber;
+            }
+
+            if (model.FirstName != null)
+            {
+                user.FirstName = model.FirstName;
+            }
+
+            if (model.LastName != null)
+            {
+                user.LastName = model.LastName;
+            }
+
+            if (model.NewPassword != null && (model.NewPassword == model.ConfirmNewPassword))
+            {
+                await _userManager.ChangePasswordAsync(user, model.Password, model.NewPassword);
+            }
+
+            try
+            {
+                await _userManager.UpdateAsync(user);
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!ProfessorExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
         }
 
         // DELETE: api/Professors/5
