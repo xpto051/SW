@@ -99,7 +99,7 @@
         </section>
         <div class="dropdown-content">
           <a [routerLink]="['/gep/viewCompanies']">Ver Empresas</a>
-          <a href="#" *ngIf="role == 'Admin' || role == 'Coordenador'">Adicionar Empresas</a>
+          <a [routerLink]="['/gep/addCompany']" *ngIf="role == 'Admin' || role == 'Coordenador'">Adicionar Empresas</a>
         </div>
       </li>
       <div class="Separator"></div>
