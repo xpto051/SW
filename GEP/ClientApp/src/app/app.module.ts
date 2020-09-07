@@ -30,12 +30,10 @@ import { AuthInterceptor } from "./auth/auth.interceptor";
 import { AddUserComponent } from "./main/add-user/add-user.component";
 import { ForbiddenComponent } from "./main/forbidden/forbidden.component";
 import { UserSettingsComponent } from "./main/user-settings/user-settings.component";
-import { CompanyDetailsComponent } from "./main/company-details/company-details.component";
-import { DialogCompanyComponent } from "./main/components/dialog-company/dialog-company.component";
+import { CompanyDetailsComponent } from './main/company-details/company-details.component';
+//import { CompanyDetailsTemplateComponent } from './main/company-details/company-details.component';
 import { StudentsListComponent } from "./main/students-list/students-list.component";
-import { PerfectScrollbarModule } from "ngx-perfect-scrollbar";
-import { PERFECT_SCROLLBAR_CONFIG } from "ngx-perfect-scrollbar";
-import { PerfectScrollbarConfigInterface } from "ngx-perfect-scrollbar";
+import { PerfectScrollbarModule, PERFECT_SCROLLBAR_CONFIG, PerfectScrollbarConfigInterface } from "ngx-perfect-scrollbar";
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
@@ -55,8 +53,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ForbiddenComponent,
     UserSettingsComponent,
     CompanyDetailsComponent,
-    DialogCompanyComponent,
     StudentsListComponent,
+    //CompanyDetailsTemplateComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: "ng-cli-universal" }),
@@ -118,6 +116,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     },
   ],
   bootstrap: [AppComponent],
-  entryComponents: [],
+  //entryComponents: [CompanyDetailsComponent, CompanyDetailsTemplateComponent]
 })
-export class AppModule {}
+export class AppModule { }

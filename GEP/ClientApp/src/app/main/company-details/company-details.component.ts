@@ -1,17 +1,30 @@
+
 import { Component, OnInit, Inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 import { MatTableDataSource } from '@angular/material';
-import { DialogCompanyComponent } from '../components/dialog-company/dialog-company.component';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-company-details',
   templateUrl: './company-details.component.html',
-  styleUrls: ['./company-details.component.css']
+  styleUrls: ['./company-details.component.css'],
+  animations: [
+    trigger("detailExpand", [
+      state("collapsed", style({ height: "0px", minHeight: "0" })),
+      state("expanded", style({ height: "*" })),
+      transition(
+        "expanded <=> collapsed",
+        animate("225ms cubic-bezier(0.4, 0.0, 0.2, 1)")
+      )
+    ])
+  ]
 })
+
 export class CompanyDetailsComponent implements OnInit {
 
+  public displayedColumns = ['id', 'sigla', 'companyName'];
   public dataSource: MatTableDataSource<Company>;
-  public displayedColumns = ['id', 'sigla', 'companyName', 'details'];
+  expandedElement: Company | null;
 
   constructor(
     private http: HttpClient,
@@ -25,16 +38,11 @@ export class CompanyDetailsComponent implements OnInit {
     );
   }
 
-
   ngOnInit() {
   }
 
-  getDetails() {
-    console.log("fods não andas crl");
-  }
-
-
 }
+
 
 interface Company {
   id: number;
@@ -43,4 +51,3 @@ interface Company {
   description: string;
   url: string;
 }
-

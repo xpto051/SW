@@ -29,6 +29,7 @@ export class NavMenuComponent {
     var token = new HttpHeaders({
       Authorization: "Bearer " + localStorage.getItem("token"),
     });
+    //verifica qual role
     this.http.get(url, { headers: token }).subscribe(
       (res) => {
         this.userDetails = res;
