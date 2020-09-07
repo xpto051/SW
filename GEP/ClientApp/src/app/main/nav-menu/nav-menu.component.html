@@ -61,11 +61,13 @@
           Estágios
         </section>
         <div class="dropdown-content">
-          <a [routerLink]="['/gep/addUser']">Ver Estágios</a>
+          <a [routerLink]="['/gep/viewInternships']">Ver Estágios</a>
           <a href="#" *ngIf="role == 'Estudante'">Meu Estágio</a>
           <a href="#" *ngIf="role == 'Estudante'">Minhas Candidaturas</a>
-          <a href="#" *ngIf="role == 'Admin' || role == 'Coordenador'">Propostas de Estágio</a>
-          <a href="#" *ngIf="role == 'Admin' || role == 'Coordenador'">Adicionar Estágios</a>
+          <a [routerLink]="['/gep/viewProposedInternship']" *ngIf="role == 'Admin' || role == 'Coordenador'">Propostas
+            de Estágio</a>
+          <a [routerLink]="['/gep/proposeInternship']" *ngIf="role == 'Admin' || role == 'ResponsavelEmpresa'">Adicionar
+            Estágios</a>
         </div>
       </li>
       <div class="Separator"></div>
@@ -111,7 +113,7 @@
           <a [routerLink]="['/gep/addUser']">Estudantes</a>
           <a [routerLink]="['/gep/addDocente']">Docentes</a>
           <a [routerLink]="['/gep/addResponsable']">Responsáveis de Empresa</a>
-          <a href="#">Coordenadores</a>
+          <a [routerLink]="['/gep/addCoordinator']">Coordenadores</a>
         </div>
       </li>
       <div *ngIf="role == 'Admin'" class="Separator"></div>

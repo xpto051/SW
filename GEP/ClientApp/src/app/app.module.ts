@@ -35,6 +35,10 @@ import { PerfectScrollbarModule, PERFECT_SCROLLBAR_CONFIG, PerfectScrollbarConfi
 import { AddCompanyComponent } from './main/add-company/add-company.component';
 import { AddDocenteComponent } from './main/add-docente/add-docente.component';
 import { AddResponsableComponent } from './main/add-responsable/add-responsable.component';
+import { AddCoordinatorComponent } from './main/add-coordinator/add-coordinator.component';
+import { ViewInternshipsComponent } from './main/view-internships/view-internships.component';
+import { ViewIntershipProposalsComponent } from './main/view-intership-proposals/view-intership-proposals.component';
+import { AddInternshipComponent } from './main/add-internship/add-internship.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
@@ -58,6 +62,10 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     AddCompanyComponent,
     AddDocenteComponent,
     AddResponsableComponent,
+    AddCoordinatorComponent,
+    ViewInternshipsComponent,
+    ViewIntershipProposalsComponent,
+    AddInternshipComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: "ng-cli-universal" }),
@@ -114,6 +122,25 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
             component: AddResponsableComponent,
             canActivate: [AuthGuard],
             data: { permittedRoles: ["Admin"] },
+          },
+          {
+            path: "addCoordinator",
+            component: AddCoordinatorComponent,
+            canActivate: [AuthGuard],
+            data: { permittedRoles: ["Admin"] },
+          },
+          { path: "viewInternships", component: ViewInternshipsComponent },
+          {
+            path: "viewProposedInternship",
+            component: ViewIntershipProposalsComponent,
+            canActivate: [AuthGuard],
+            data: { permittedRoles: ["Admin", "Coordenador"] },
+          },
+          {
+            path: "proposeInternship",
+            component: AddInternshipComponent,
+            canActivate: [AuthGuard],
+            data: { permittedRoles: ["Admin", "ResponsavelEmpresa"] },
           },
           { path: "viewStudents", component: StudentsListComponent },
           { path: "viewCompanies", component: CompanyDetailsComponent },
