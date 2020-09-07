@@ -23,8 +23,10 @@
                     <br>
                     <br>
                     <!-- ACEITAR/REJEITAR PROPOSTA BUTTON : ADICIONAR O CLICK -->
-                    <button mat-raised-button color="primary" style="float: left;">Aceitar Proposta</button>
-                    <button mat-raised-button color="primary" style="margin-left: 1em;">Rejeitar Proposta</button>
+                    <button mat-raised-button color="primary" (click)="acceptProposal(element.id)"
+                        style="float: left;">Aceitar Proposta</button>
+                    <button mat-raised-button color="primary" (click)="rejectProposal(element.id)"
+                        style="margin-left: 1em;">Rejeitar Proposta</button>
                 </div>
             </div>
         </td>
