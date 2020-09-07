@@ -50,32 +50,22 @@ namespace GEP.Controllers
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> PutCourse(int id, Course course)
+        public async Task<IActionResult> PutCourse(int id, UpdateCourseViewModel course)
         {
-            if (id != course.Id)
+            var c = await _context.Course.FirstOrDefaultAsync(i => i.Id == id);
+            if(course.Sigla != null)
             {
-                return BadRequest();
+                c.Sigla = course.Sigla;
+            }
+            if(course.Designacao != null)
+            {
+                c.Designacao = course.Designacao;
             }
 
-            _context.Entry(course).State = EntityState.Modified;
+            _context.Update(c);
+            await _context.SaveChangesAsync();
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!CourseExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            return Ok(c);
         }
 
         // POST: api/Courses
@@ -87,7 +77,7 @@ namespace GEP.Controllers
         {
             Course c = new Course()
             {
-                Designação = course.Designação,
+                Designacao = course.Designacao,
                 Sigla = course.Sigla
             };
             _context.Course.Add(c);

@@ -14,6 +14,6 @@ namespace GEP.Models
         public int Id { get; set; }
 
         public string Sigla { get; set; }
-        public string Designação { get; set; }
+        public string Designacao { get; set; }
     }
 }

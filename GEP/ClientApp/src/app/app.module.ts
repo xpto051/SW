@@ -1,6 +1,6 @@
 import { BrowserModule } from "@angular/platform-browser";
 import { NgModule } from "@angular/core";
-import { FormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { RouterModule } from "@angular/router";
 import {
@@ -12,6 +12,7 @@ import {
   MatCheckboxModule,
   MatIconModule,
   MatTableModule,
+  MatSelectModule,
   MatDialogModule,
   MAT_DIALOG_DEFAULT_OPTIONS,
 } from "@angular/material";
@@ -69,8 +70,10 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     MatIconModule,
     MatTableModule,
     MatDialogModule,
+    MatSelectModule,
     BrowserAnimationsModule,
     PerfectScrollbarModule,
+    ReactiveFormsModule,
     ToastrModule.forRoot({
       positionClass: "toast-top-right",
       preventDuplicates: true,

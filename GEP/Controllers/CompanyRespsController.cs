@@ -71,6 +71,31 @@ namespace GEP.Controllers
             return companyResp;
         }
 
+
+        //GET: api/CompanyResps/myDetails
+        [HttpGet]
+        [Route("myDetails")]
+        [Authorize(Roles = "ResponsavelEmpresa")]
+        public async Task<Object> GetMyDetails()
+        {
+            string userId = User.Claims.First(c => c.Type == "UserID").Value;
+            var user = await _userManager.FindByIdAsync(userId);
+            var resp = await _context.CompaniesResp.FirstAsync(c => c.UserId == user.Id);
+
+            if(CompanyRespExists(resp.Id)) {
+                return new
+                {
+                    resp.User.FirstName,
+                    resp.User.LastName,
+                    resp.User.PhoneNumber
+                };
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
+
         [HttpPost]
         //POST : /api/CompanyResps
         public async Task<ActionResult<User>> PostCompanyResp([FromBody] RegistrationRespViewModel model)
@@ -109,8 +134,8 @@ namespace GEP.Controllers
         // PUT: api/CompanyResps/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [HttpPut("{id}")]
-        [Authorize(Roles = "ResponsavelEmpresa, Admin")]
+        [HttpPut]
+        [Authorize(Roles = "ResponsavelEmpresa")]
         public async Task<IActionResult> PutCompanyResp(int id, [FromBody] CompanyRespPutViewModel model)
         {
             string userId = User.Claims.First(c => c.Type == "UserID").Value;
