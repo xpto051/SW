@@ -11,7 +11,6 @@ namespace GEP.ViewModels.TFCs
     {
         public int Vagas { get; set; }
         public string Theme { get; set; }
-        public int ProfessorID { get; set; }
         public string Description { get; set; }
 
 

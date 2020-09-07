@@ -11,5 +11,8 @@ namespace GEP.Models
     {
         public string Theme { get; set; }
 
+        public int ProfessorId { get; set; }
+        public virtual Professor Professor { get; set; }
+
     }
 }

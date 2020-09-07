@@ -22,5 +22,6 @@ namespace GEP.Models
         public string ProfessorId { get; set; }
         public User Professor { get; set; }
         public bool wasAccepted { get; set; }
+        public bool isApplication { get; set; }
     }
 }
