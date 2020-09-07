@@ -29,7 +29,7 @@ export class ViewProjectsComponent implements OnInit {
     private http: HttpClient,
     @Inject('BASE_URL') private baseUrl: string
   ) {
-    http.get<Project[]>(baseUrl + 'api/Projects/proposeProjects').subscribe(
+    http.get<Project[]>(baseUrl + 'api/Projects/availableProjects').subscribe(
       result => {
         this.dataSource = new MatTableDataSource(result);
         console.log(result);

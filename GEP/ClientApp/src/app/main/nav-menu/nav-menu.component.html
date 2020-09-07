@@ -24,10 +24,9 @@
           <a [routerLink]="['/gep/viewProjects']">Ver Projectos</a>
           <a href="#" *ngIf="role == 'Estudante'">Meu Projecto</a>
           <a href="#" *ngIf="role == 'Estudante'">Minhas Candidaturas</a>
-          <a href="#" *ngIf="role == 'Admin' || role == 'Coordenador'">Propostas de Projecto</a>
-          <a href="#" *ngIf="
-              role == 'Admin' || role == 'Coordenador' || role == 'Docente'
-            ">Adicionar Projectos</a>
+          <a [routerLink]="['/gep/viewProposedProject']" *ngIf="role == 'Admin' || role == 'Coordenador'">Propostas de
+            Projecto</a>
+          <a href="#" *ngIf="role == 'Admin' || role == 'Coordenador' || role == 'Docente'">Adicionar Projectos</a>
         </div>
       </li>
       <div class="Separator"></div>
