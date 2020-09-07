@@ -41,6 +41,7 @@ import { AddCoordinatorComponent } from "./main/add-coordinator/add-coordinator.
 import { ViewInternshipsComponent } from "./main/view-internships/view-internships.component";
 import { ViewIntershipProposalsComponent } from "./main/view-intership-proposals/view-intership-proposals.component";
 import { AddInternshipComponent } from "./main/add-internship/add-internship.component";
+import { ViewProjectsComponent } from './main/view-projects/view-projects.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
@@ -66,6 +67,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ViewInternshipsComponent,
     ViewIntershipProposalsComponent,
     AddInternshipComponent,
+    ViewProjectsComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: "ng-cli-universal" }),
@@ -140,6 +142,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
             canActivate: [AuthGuard],
             data: { permittedRoles: ["Admin", "ResponsavelEmpresa"] },
           },
+          { path: "viewProjects", component: ViewProjectsComponent },
           { path: "viewStudents", component: StudentsListComponent },
           { path: "viewCompanies", component: CompanyDetailsComponent },
           { path: "settings", component: UserSettingsComponent },
@@ -160,4 +163,4 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }

@@ -4,9 +4,9 @@ import { MatTableDataSource } from '@angular/material';
 import { HttpClient } from '@angular/common/http';
 
 @Component({
-  selector: 'app-view-internships',
-  templateUrl: './view-internships.component.html',
-  styleUrls: ['./view-internships.component.css'],
+  selector: 'app-view-projects',
+  templateUrl: './view-projects.component.html',
+  styleUrls: ['./view-projects.component.css'],
   animations: [
     trigger("detailExpand", [
       state("collapsed", style({ height: "0px", minHeight: "0" })),
@@ -18,18 +18,18 @@ import { HttpClient } from '@angular/common/http';
     ])
   ]
 })
-export class ViewInternshipsComponent implements OnInit {
+export class ViewProjectsComponent implements OnInit {
 
-  public displayedColumns = ['role', 'companyName', 'vagas'];
-  public dataSource: MatTableDataSource<Internship>;
-  expandedElement: Internship | null;
+  public displayedColumns = ['theme', 'vagas'];
+  public dataSource: MatTableDataSource<Project>;
+  expandedElement: Project | null;
 
 
   constructor(
     private http: HttpClient,
     @Inject('BASE_URL') private baseUrl: string
   ) {
-    http.get<Internship[]>(baseUrl + 'api/Internships/availableInternships').subscribe(
+    http.get<Project[]>(baseUrl + 'api/Projects/proposeProjects').subscribe(
       result => {
         this.dataSource = new MatTableDataSource(result);
         console.log(result);
@@ -44,29 +44,26 @@ export class ViewInternshipsComponent implements OnInit {
 }
 
 
-interface Internship {
+interface Project {
   id: number;
-  role: string;
-  companyId: number;
-  company: Company;
-  companyRespId: number;
-  companyResp: CompanyResponsable;
+  theme: string;
+  professorId: number;
+  professor: Professor;
   vagas: number;
   proposta: boolean;
   aceite: boolean;
   description: string;
 }
 
-interface Company {
+interface Professor {
   id: number;
-  sigla: string;
-  companyName: string;
-  description: string;
-  url: string;
+  number: string;
+  userId: number;
+  user: User;
 }
 
-interface CompanyResponsable {
-  email: string;
+interface User {
   name: string;
-  company: Company;
+  email: string;
+  emailConfirmed: boolean;
 }
