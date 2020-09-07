@@ -1,6 +1,7 @@
 
 table {
   width: 100%;
+  margin-top: 2em;
 }
 
 tr.detail-row {
@@ -49,4 +50,8 @@ tr.element-row:not(.example-expanded-row):active {
 
 th::first-letter {
   text-transform: uppercase;
+}
+
+ng-container{
+  margin: 100px;
 }
