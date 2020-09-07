@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using GEP.Data;
 using GEP.Models;
+using GEP.ViewModels;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace GEP.Controllers
 {
@@ -15,10 +18,12 @@ namespace GEP.Controllers
     public class UserTFCsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<User> _userManager;
 
-        public UserTFCsController(ApplicationDbContext context)
+        public UserTFCsController(ApplicationDbContext context, UserManager<User> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: api/UserTFCs
@@ -109,6 +114,7 @@ namespace GEP.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
+        [Route("accept")]
         public async Task<IActionResult> AcceptUserTFC(int id)
         {
             var userTFC = await _context.UserTFC.FindAsync(id);
@@ -118,6 +124,7 @@ namespace GEP.Controllers
             }
 
             userTFC.wasAccepted = true;
+            userTFC.isApplication = false;
 
             try
             {
@@ -141,7 +148,8 @@ namespace GEP.Controllers
         // PUT: api/UserTFCs/reject/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [HttpPut("{id}")]
+        [HttpPut]
+        [Route("reject/{id}")]
         public async Task<IActionResult> RejectUserTFC(int id)
         {
             var userTFC = await _context.UserTFC.FindAsync(id);
@@ -150,7 +158,8 @@ namespace GEP.Controllers
                 return NotFound();
             }
 
-            userTFC.wasAccepted = true;
+            userTFC.wasAccepted = false;
+            userTFC.isApplication = false;
 
             try
             {
@@ -175,12 +184,29 @@ namespace GEP.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<UserTFC>> PostUserTFC(UserTFC userTFC)
+        [Authorize(Roles ="Estudante")]
+        public async Task<ActionResult<UserTFC>> PostUserTFC(UserTFCViewModel userTFC)
         {
-            _context.UserTFC.Add(userTFC);
+            string userId = User.Claims.First(c => c.Type == "UserID").Value;
+            var user = await _userManager.FindByIdAsync(userId);
+            var est = await _context.Students.FirstAsync(c => c.UserId == user.Id);
+
+            var prof = await _context.Professors.FindAsync(userTFC.ProfessorId);
+            var profUser = await _userManager.FindByIdAsync(prof.UserId);
+
+            UserTFC c = new UserTFC()
+            {
+                User = user,
+                TFC = await _context.TFCs.FindAsync(userTFC.TFCId),
+                wasAccepted = false,
+                Professor = profUser,
+                isApplication = true
+            };
+
+            _context.UserTFC.Add(c);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetUserTFC", new { id = userTFC.Id }, userTFC);
+            return Ok(c);
         }
 
         // DELETE: api/UserTFCs/5

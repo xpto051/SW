@@ -31,5 +31,6 @@ namespace GEP.Data
         public DbSet<GEP.Models.Notifications.Notification> Notification { get; set; }
         public DbSet<GEP.Models.File.File> File { get; set; }
         public DbSet<GEP.Models.UserTFC> UserTFC { get; set; }
+        public DbSet<GEP.Models.Project> Project { get; set; }
     }
 }
