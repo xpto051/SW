@@ -1,19 +1,9 @@
 <mat-tab-group mat-align-tabs="center">
   <mat-tab label="Adicionar Estudante">
-    <form
-      #form="ngForm"
-      class="example-container"
-      (ngSubmit)="onSubmit()"
-      [formGroup]="estudanteForm"
-    >
+    <form #form="ngForm" class="container" (ngSubmit)="onSubmit()" [formGroup]="estudanteForm">
       <mat-form-field appearance="fill">
         <mat-label>Email do Utilizador</mat-label>
-        <input
-          matInput
-          formControlName="email"
-          placeholder="pat@example.com"
-          required
-        />
+        <input matInput formControlName="email" placeholder="pat@example.com" required />
         <mat-error *ngIf="email.invalid">{{ getErrorMessage() }}</mat-error>
       </mat-form-field>
       <mat-form-field appearance="fill">
@@ -42,6 +32,43 @@
     </form>
   </mat-tab>
   <mat-tab label="Lista de Estudantes">
-    <ng-template matTabContent> Content 2 - Loaded: </ng-template>
+    <table mat-table [dataSource]="dataSource" multiTemplateDataRows>
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef> Nome </th>
+        <td mat-cell *matCellDef="let element"> {{element.user.name}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="number">
+        <th mat-header-cell *matHeaderCellDef> Nº de Aluno </th>
+        <td mat-cell *matCellDef="let element"> {{element.number}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="course">
+        <th mat-header-cell *matHeaderCellDef> Curso </th>
+        <td mat-cell *matCellDef="let element"> {{element.course.sigla}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="emailConfirmed">
+        <th mat-header-cell *matHeaderCellDef> Email Confirmado </th>
+        <ng-container *matCellDef="let element">
+          <td mat-cell *ngIf="element.user.emailConfirmed; else notConfirmed"> Confirmado. </td>
+          <ng-template #notConfirmed>
+            <td mat-cell>Não Confirmado.</td>
+          </ng-template>
+        </ng-container>
+      </ng-container>
+
+      <ng-container matColumnDef="delete">
+        <th mat-header-cell *matHeaderCellDef> Apagar </th>
+        <td mat-cell *matCellDef="let element">
+          <button mat-button color="primary" (click)='deleteAluno(element.id)'>
+            <mat-icon class="mat-18">delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
   </mat-tab>
 </mat-tab-group>
