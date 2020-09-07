@@ -64,7 +64,7 @@ export class AddDocenteComponent implements OnInit {
 
     this.http.post(url, this.docenteForm.value).subscribe(
       (res) => {
-        this.toastr.success("Foi enviado um email de confirmação ao estudante");
+        this.toastr.success("Foi enviado um email de confirmação ao docente.");
         this.refreshList();
       },
       (err) => {

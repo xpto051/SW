@@ -111,7 +111,7 @@
           <a [routerLink]="['/gep/addUser']">Estudantes</a>
           <a [routerLink]="['/gep/addDocente']">Docentes</a>
           <a [routerLink]="['/gep/addResponsable']">Responsáveis de Empresa</a>
-          <a href="#">Coordenadores</a>
+          <a [routerLink]="['/gep/addCoordinator']">Coordenadores</a>
         </div>
       </li>
       <div *ngIf="role == 'Admin'" class="Separator"></div>

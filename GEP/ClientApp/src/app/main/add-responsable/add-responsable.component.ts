@@ -78,7 +78,7 @@ export class AddResponsableComponent implements OnInit {
 
     this.http.post(url, this.responsableForm.value).subscribe(
       (res) => {
-        this.toastr.success("Foi enviado um email de confirmação ao estudante");
+        this.toastr.success("Foi enviado um email de confirmação ao responsável.");
         this.refreshList();
       },
       (err) => {
