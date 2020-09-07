@@ -42,6 +42,7 @@ import { ViewInternshipsComponent } from "./main/view-internships/view-internshi
 import { ViewIntershipProposalsComponent } from "./main/view-intership-proposals/view-intership-proposals.component";
 import { AddInternshipComponent } from "./main/add-internship/add-internship.component";
 import { ViewProjectsComponent } from './main/view-projects/view-projects.component';
+import { ApplyInternshipComponent } from "./main/apply-internship/apply-internship.component";
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
@@ -68,6 +69,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ViewIntershipProposalsComponent,
     AddInternshipComponent,
     ViewProjectsComponent,
+    ApplyInternshipComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: "ng-cli-universal" }),
@@ -146,6 +148,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
           { path: "viewStudents", component: StudentsListComponent },
           { path: "viewCompanies", component: CompanyDetailsComponent },
           { path: "settings", component: UserSettingsComponent },
+          { path: "applyInternship", component: ApplyInternshipComponent },
         ],
       },
     ]),

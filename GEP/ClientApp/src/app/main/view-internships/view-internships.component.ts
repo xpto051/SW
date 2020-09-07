@@ -1,12 +1,19 @@
-import { Component, OnInit, Inject } from '@angular/core';
-import { trigger, state, style, transition, animate } from '@angular/animations';
-import { MatTableDataSource } from '@angular/material';
-import { HttpClient } from '@angular/common/http';
+import { Component, OnInit, Inject } from "@angular/core";
+import {
+  trigger,
+  state,
+  style,
+  transition,
+  animate,
+} from "@angular/animations";
+import { MatTableDataSource } from "@angular/material";
+import { HttpClient } from "@angular/common/http";
+import { Router } from "@angular/router";
 
 @Component({
-  selector: 'app-view-internships',
-  templateUrl: './view-internships.component.html',
-  styleUrls: ['./view-internships.component.css'],
+  selector: "app-view-internships",
+  templateUrl: "./view-internships.component.html",
+  styleUrls: ["./view-internships.component.css"],
   animations: [
     trigger("detailExpand", [
       state("collapsed", style({ height: "0px", minHeight: "0" })),
@@ -14,35 +21,37 @@ import { HttpClient } from '@angular/common/http';
       transition(
         "expanded <=> collapsed",
         animate("225ms cubic-bezier(0.4, 0.0, 0.2, 1)")
-      )
-    ])
-  ]
+      ),
+    ]),
+  ],
 })
 export class ViewInternshipsComponent implements OnInit {
-
-  public displayedColumns = ['role', 'companyName', 'vagas'];
+  public displayedColumns = ["role", "companyName", "vagas"];
   public dataSource: MatTableDataSource<Internship>;
   expandedElement: Internship | null;
 
-
   constructor(
     private http: HttpClient,
-    @Inject('BASE_URL') private baseUrl: string
+    private router: Router,
+    @Inject("BASE_URL") private baseUrl: string
   ) {
-    http.get<Internship[]>(baseUrl + 'api/Internships/availableInternships').subscribe(
-      result => {
-        this.dataSource = new MatTableDataSource(result);
-        console.log(result);
-      },
-      error => console.error('error')
-    );
+    http
+      .get<Internship[]>(baseUrl + "api/Internships/availableInternships")
+      .subscribe(
+        (result) => {
+          this.dataSource = new MatTableDataSource(result);
+          console.log(result);
+        },
+        (error) => console.error("error")
+      );
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
+  navigateApply() {
+    this.router.navigateByUrl("/gep/applyInternship");
+  }
 }
-
 
 interface Internship {
   id: number;
