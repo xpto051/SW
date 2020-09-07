@@ -32,6 +32,8 @@ import { UserSettingsComponent } from "./main/user-settings/user-settings.compon
 import { CompanyDetailsComponent } from './main/company-details/company-details.component';
 import { StudentsListComponent } from "./main/students-list/students-list.component";
 import { PerfectScrollbarModule, PERFECT_SCROLLBAR_CONFIG, PerfectScrollbarConfigInterface } from "ngx-perfect-scrollbar";
+import { AddCompanyComponent } from './main/add-company/add-company.component';
+import { AddDocenteComponent } from './main/add-docente/add-docente.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
@@ -52,6 +54,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     UserSettingsComponent,
     CompanyDetailsComponent,
     StudentsListComponent,
+    AddCompanyComponent,
+    AddDocenteComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: "ng-cli-universal" }),
@@ -88,6 +92,18 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
           {
             path: "addUser",
             component: AddUserComponent,
+            canActivate: [AuthGuard],
+            data: { permittedRoles: ["Admin"] },
+          },
+          {
+            path: "addDocente",
+            component: AddDocenteComponent,
+            canActivate: [AuthGuard],
+            data: { permittedRoles: ["Admin"] },
+          },
+          {
+            path: "addCompany",
+            component: AddCompanyComponent,
             canActivate: [AuthGuard],
             data: { permittedRoles: ["Admin"] },
           },

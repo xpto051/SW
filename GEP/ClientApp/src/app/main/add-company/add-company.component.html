@@ -1,0 +1,21 @@
+<form #form="ngForm" class="container" (ngSubmit)="onSubmit()" [formGroup]="companyForm">
+    <mat-form-field appearance="fill">
+        <mat-label>Sigla</mat-label>
+        <input matInput formControlName="sigla" placeholder="ex: AMZ" required />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+        <mat-label>Nome da Empresa</mat-label>
+        <input matInput formControlName="companyName" placeholder="ex: Amazon" required />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+        <mat-label>Descrição</mat-label>
+        <input matInput formControlName="description" placeholder="ex: Empresa de Serviços Online Shopping" />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+        <mat-label>URL</mat-label>
+        <input matInput formControlName="url" placeholder="ex: www.amazon.pt" />
+    </mat-form-field>
+    <button class="AddCompany" type="submit" mat-button>
+        Adicionar Empresa
+    </button>
+</form>
