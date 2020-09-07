@@ -49,7 +49,6 @@ export class AddInternshipComponent implements OnInit {
     this.http.post(url, this.internshipForm.value, { headers: token }).subscribe(
       (res) => {
         this.toastr.success("O estágio foi proposto com sucesso.");
-        //this.refreshList();
       },
       (err) => {
         this.toastr.error("Houve um erro na criação da proposta de estágio.");
@@ -58,11 +57,6 @@ export class AddInternshipComponent implements OnInit {
     );
   }
 
-  // refreshList() {
-  //   this.http.get<CompanyResponsable[]>(this.baseUrl + 'api/CompanyResps').toPromise().then(
-  //     result => this.dataSource = new MatTableDataSource(result)
-  //   );
-  // }
 
 }
 

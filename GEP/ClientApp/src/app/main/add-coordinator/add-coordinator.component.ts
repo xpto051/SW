@@ -90,7 +90,7 @@ export class AddCoordinatorComponent implements OnInit {
     var url = this.baseUrl + "api/Coordenators/" + coordinatorId;
     this.http.delete(url).subscribe(
       (res) => {
-        this.toastr.success("O Coordenador foi apagado.")
+        this.toastr.success("O Coordenador foi apagado.");
         this.refreshList();
       },
       (error) => {

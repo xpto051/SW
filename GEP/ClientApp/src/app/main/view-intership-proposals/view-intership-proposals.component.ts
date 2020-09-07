@@ -1,7 +1,8 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { trigger, state, style, transition, animate } from '@angular/animations';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-view-intership-proposals',
@@ -27,7 +28,8 @@ export class ViewIntershipProposalsComponent implements OnInit {
 
   constructor(
     private http: HttpClient,
-    @Inject('BASE_URL') private baseUrl: string
+    @Inject('BASE_URL') private baseUrl: string,
+    private toastr: ToastrService
   ) {
     http.get<Internship[]>(baseUrl + 'api/Internships/proposeInternship').subscribe(
       result => {
@@ -39,6 +41,48 @@ export class ViewIntershipProposalsComponent implements OnInit {
   }
 
   ngOnInit() {
+  }
+
+  acceptProposal(proposalId) {
+    var token = new HttpHeaders({
+      Authorization: "Bearer " + localStorage.getItem("token"),
+    });
+
+    var url = this.baseUrl + "api/Internships/acceptPropose/" + proposalId;
+    this.http.put(url, { headers: token }).subscribe(
+      (res) => {
+        this.toastr.success("A proposta foi aceite.");
+        this.refreshList();
+      },
+      (error) => {
+        this.toastr.error("Ocurreu um erro ao tentar aceitar a proposta.");
+        console.error(error);
+      }
+    );
+  }
+
+  rejectProposal(proposalId) {
+    var token = new HttpHeaders({
+      Authorization: "Bearer " + localStorage.getItem("token"),
+    });
+
+    var url = this.baseUrl + "api/Internships/rejectPropose/" + proposalId;
+    this.http.put(url, { headers: token }).subscribe(
+      (res) => {
+        this.toastr.success("A proposta foi rejeitada.");
+        this.refreshList();
+      },
+      (error) => {
+        this.toastr.error("Ocurreu um erro ao tentar rejeitar a proposta.");
+        console.error(error);
+      }
+    );
+  }
+
+  refreshList() {
+    this.http.get<Internship[]>(this.baseUrl + 'api/Internships/proposeInternship').toPromise().then(
+      result => this.dataSource = new MatTableDataSource(result)
+    );
   }
 
 }
