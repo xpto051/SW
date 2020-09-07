@@ -18,8 +18,6 @@ import {
 import { AppComponent } from "./app.component";
 import { NavMenuComponent } from "./main/nav-menu/nav-menu.component";
 import { HomeComponent } from "./main/home/home.component";
-import { CounterComponent } from "./main/counter/counter.component";
-import { FetchDataComponent } from "./main/fetch-data/fetch-data.component";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { LoginComponent } from "./login/login.component";
 import { MainComponent } from "./main/main.component";
@@ -29,16 +27,20 @@ import { AuthInterceptor } from "./auth/auth.interceptor";
 import { AddUserComponent } from "./main/add-user/add-user.component";
 import { ForbiddenComponent } from "./main/forbidden/forbidden.component";
 import { UserSettingsComponent } from "./main/user-settings/user-settings.component";
-import { CompanyDetailsComponent } from './main/company-details/company-details.component';
+import { CompanyDetailsComponent } from "./main/company-details/company-details.component";
 import { StudentsListComponent } from "./main/students-list/students-list.component";
-import { PerfectScrollbarModule, PERFECT_SCROLLBAR_CONFIG, PerfectScrollbarConfigInterface } from "ngx-perfect-scrollbar";
-import { AddCompanyComponent } from './main/add-company/add-company.component';
-import { AddDocenteComponent } from './main/add-docente/add-docente.component';
-import { AddResponsableComponent } from './main/add-responsable/add-responsable.component';
-import { AddCoordinatorComponent } from './main/add-coordinator/add-coordinator.component';
-import { ViewInternshipsComponent } from './main/view-internships/view-internships.component';
-import { ViewIntershipProposalsComponent } from './main/view-intership-proposals/view-intership-proposals.component';
-import { AddInternshipComponent } from './main/add-internship/add-internship.component';
+import {
+  PerfectScrollbarModule,
+  PERFECT_SCROLLBAR_CONFIG,
+  PerfectScrollbarConfigInterface,
+} from "ngx-perfect-scrollbar";
+import { AddCompanyComponent } from "./main/add-company/add-company.component";
+import { AddDocenteComponent } from "./main/add-docente/add-docente.component";
+import { AddResponsableComponent } from "./main/add-responsable/add-responsable.component";
+import { AddCoordinatorComponent } from "./main/add-coordinator/add-coordinator.component";
+import { ViewInternshipsComponent } from "./main/view-internships/view-internships.component";
+import { ViewIntershipProposalsComponent } from "./main/view-intership-proposals/view-intership-proposals.component";
+import { AddInternshipComponent } from "./main/add-internship/add-internship.component";
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
@@ -50,8 +52,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     AppComponent,
     NavMenuComponent,
     HomeComponent,
-    CounterComponent,
-    FetchDataComponent,
     LoginComponent,
     MainComponent,
     AddUserComponent,
@@ -97,8 +97,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         canActivate: [AuthGuard],
         children: [
           { path: "home", component: HomeComponent },
-          { path: "counter", component: CounterComponent },
-          { path: "fetch-data", component: FetchDataComponent },
           {
             path: "addUser",
             component: AddUserComponent,
@@ -158,8 +156,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
       multi: true,
-    }
+    },
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
