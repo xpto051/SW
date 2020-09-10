@@ -28,7 +28,7 @@ import { Router } from "@angular/router";
 export class ViewInternshipsComponent implements OnInit {
   public displayedColumns = ["role", "companyName", "vagas"];
   public dataSource: MatTableDataSource<Internship>;
-  expandedElement: Company | null;
+  expandedElement: Internship | null;
 
   constructor(
     private http: HttpClient,
