@@ -1,0 +1,19 @@
+<form #form="ngForm" class="container" (ngSubmit)="onSubmit()" [formGroup]="internshipForm">
+    <mat-form-field appearance="fill">
+        <mat-label>Role</mat-label>
+        <input matInput formControlName="role" placeholder="FrontEnd Dev" required />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+        <mat-label>Nº de Vagas</mat-label>
+        <input matInput formControlName="vagas" placeholder="ex: 20" required />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+        <mat-label>Descrição</mat-label>
+        <input matInput formControlName="description"
+            placeholder="ex: Full Time, a trabalhar com Angular/JS, maioritareamente focado no desenvolvimento de Web Apps"
+            required />
+    </mat-form-field>
+    <button class="AddInternship" type="submit" mat-button>
+        Submeter Proposta de Estágio
+    </button>
+</form>

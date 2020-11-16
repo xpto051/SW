@@ -1,0 +1,62 @@
+/* You can add global styles to this file, and also import other style files */
+
+/* Provide sufficient contrast against white background */
+a {
+  color: #0366d6;
+  text-decoration: none;
+}
+
+ul {
+  list-style: none;
+}
+
+code {
+  color: #e01a76;
+}
+
+.btn-primary {
+  color: #fff;
+  background-color: #1b6ec2;
+  border-color: #1861ac;
+}
+
+html,
+body {
+  height: 100%;
+  background-color: whitesmoke;
+}
+body {
+  margin: 0;
+  padding: 0;
+  outline: 0;
+  box-sizing: border-box;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+/* TOASTR BUGFIX */
+#toast-container > div {
+  opacity: 1;
+  top: 20px !important;
+  position: absolute !important;
+  right: 20px !important;
+  padding: 5px !important;
+  border-radius: 10px !important;
+}
+.toast {
+  font-size: initial !important;
+  border: initial !important;
+  backdrop-filter: blur(0) !important;
+}
+.toast-success {
+  background-color: #51a351 !important;
+}
+.toast-error {
+  background-color: #bd362f !important;
+  color: white;
+}
+.toast-info {
+  background-color: #2f96b4 !important;
+}
+.toast-warning {
+  background-color: #f89406 !important;
+}

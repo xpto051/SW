@@ -1,0 +1,71 @@
+<div class="Container">
+  <form #form="ngForm" autocomplete="off" (submit)="onSubmit(form)">
+    <img
+      class="avatar"
+      src="https://ucc.edu.gh/sites/default/files/default_images/img_avatar_0.png"
+    />
+
+    <input
+      *ngIf="formData != null"
+      name="firstName"
+      class="Input"
+      #firstName="ngModel"
+      [(ngModel)]="formData.firstName"
+      placeholder="Primeiro nome"
+    />
+    <input
+      *ngIf="formData != null"
+      name="lastName"
+      class="Input"
+      #lastName="ngModel"
+      [(ngModel)]="formData.lastName"
+      placeholder="Ultimo nome"
+    />
+    <input
+      *ngIf="formData != null"
+      name="phoneNumber"
+      class="Input"
+      #phoneNumber="ngModel"
+      [(ngModel)]="formData.phoneNumber"
+      placeholder="Telemóvel"
+    />
+
+    <hr />
+
+    <input
+      *ngIf="formData != null"
+      class="Input"
+      type="password"
+      #password="ngModel"
+      name="password"
+      [(ngModel)]="formData.password"
+      placeholder="Password"
+      required
+    />
+    <input
+      *ngIf="formData != null"
+      class="Input"
+      type="password"
+      name="newPassword"
+      #newPassword="ngModel"
+      [(ngModel)]="formData.newPassword"
+      placeholder="New Password"
+    />
+    <input
+      *ngIf="formData != null"
+      class="Input"
+      type="password"
+      name="confirmNewPassword"
+      #confirmNewPassword="ngModel"
+      [(ngModel)]="formData.confirmNewPassword"
+      placeholder="Confirm new Password"
+    />
+
+    <div class="ButtonContainer">
+      <button class="UpdateProfileButton" type="submit">
+        Atualizar Perfil
+      </button>
+      <button class="LogoutButton">Sair</button>
+    </div>
+  </form>
+</div>

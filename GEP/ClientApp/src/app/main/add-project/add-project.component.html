@@ -1,0 +1,19 @@
+<form #form="ngForm" class="container" (ngSubmit)="onSubmit()" [formGroup]="projectForm">
+    <mat-form-field appearance="fill">
+        <mat-label>Tema</mat-label>
+        <input matInput formControlName="theme" placeholder="Website de Voluntariado" required />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+        <mat-label>Nº de Vagas</mat-label>
+        <input matInput formControlName="vagas" placeholder="ex: 20" required />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+        <mat-label>Descrição</mat-label>
+        <input matInput formControlName="description"
+            placeholder="ex: Desenvolver um website interativo para a candidatura/proposta a/de projetos de voluntariado na comunidade."
+            required />
+    </mat-form-field>
+    <button class="AddProject" type="submit" mat-button>
+        Submeter Proposta de Projeto.
+    </button>
+</form>

@@ -1,0 +1,77 @@
+<header>
+  <ul class="nav">
+    <div class="LiItems">
+      <li [routerLinkActive]="['link-active']">
+        <img class="logo" src="../../../assets/img/Logótipo_do_Instituto_Politécnico_de_Setúbal.png"
+          [routerLink]="['/gep/home']" />
+      </li>
+      <li [routerLinkActive]="['link-active']" class="dropdown">
+        <section class="ItemSection">Estágios</section>
+        <div class="dropdown-content">
+          <a [routerLink]="['/gep/viewInternships']">Ver Estágios</a>
+          <a href="#" *ngIf="role == 'Estudante'">Meu Estágio</a>
+          <a href="#" *ngIf="role == 'Estudante'">Minhas Candidaturas</a>
+          <a [routerLink]="['/gep/viewProposedInternship']" *ngIf="role == 'Admin' || role == 'Coordenador'">Propostas
+            de Estágio</a>
+          <a [routerLink]="['/gep/proposeInternship']" *ngIf="role == 'Admin' || role == 'ResponsavelEmpresa'">Adicionar
+            Estágios</a>
+        </div>
+      </li>
+      <div class="Separator"></div>
+      <li [routerLinkActive]="['link-active']" class="dropdown">
+        <section class="ItemSection">Projectos</section>
+        <div class="dropdown-content">
+          <a [routerLink]="['/gep/viewProjects']">Ver Projectos</a>
+          <a href="#" *ngIf="role == 'Estudante'">Meu Projecto</a>
+          <a href="#" *ngIf="role == 'Estudante'">Minhas Candidaturas</a>
+          <a [routerLink]="['/gep/viewProposedProject']" *ngIf="role == 'Admin' || role == 'Coordenador'">Propostas de
+            Projecto</a>
+          <a [routerLink]="['/gep/proposeProject']" *ngIf="role == 'Admin' || role == 'Docente'">Adicionar
+            Projectos</a>
+        </div>
+      </li>
+      <div class="Separator"></div>
+      <li [routerLinkActive]="['link-active']" class="dropdown">
+        <section class="ItemSection">Estudantes</section>
+        <div class="dropdown-content">
+          <a [routerLink]="['/gep/viewStudents']">Ver Estudantes</a>
+        </div>
+      </li>
+      <div class="Separator"></div>
+      <li [routerLinkActive]="['link-active']" class="dropdown">
+        <section class="ItemSection">Empresas</section>
+        <div class="dropdown-content">
+          <a [routerLink]="['/gep/viewCompanies']">Ver Empresas</a>
+          <a [routerLink]="['/gep/addCompany']" *ngIf="role == 'Admin' || role == 'Coordenador'">Adicionar Empresas</a>
+        </div>
+      </li>
+      <div class="Separator"></div>
+      <li [routerLinkActive]="['link-active']" *ngIf="role == 'Admin'" class="dropdown">
+        <section class="ItemSection">Gerir Utilizadores</section>
+        <div class="dropdown-content">
+          <a [routerLink]="['/gep/addUser']">Estudantes</a>
+          <a [routerLink]="['/gep/addDocente']">Docentes</a>
+          <a [routerLink]="['/gep/addResponsable']">Responsáveis de Empresa</a>
+          <a [routerLink]="['/gep/addCoordinator']">Coordenadores</a>
+        </div>
+      </li>
+      <div *ngIf="role == 'Admin'" class="Separator"></div>
+    </div>
+
+    <aside>
+      <div class="Profile">
+        <div>
+          <strong *ngIf="userDetails">{{ userDetails.name }}</strong>
+          <section>{{ role }}</section>
+        </div>
+        <div class="Container dropdown">
+          <img class="Img" src="https://ucc.edu.gh/sites/default/files/default_images/img_avatar_0.png" alt="avatar" />
+          <div class="dropdown-content-profile">
+            <a [routerLink]="['/gep/settings']">Definições</a>
+            <a role="button" (click)="onLogout()">Sair</a>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </ul>
+</header>

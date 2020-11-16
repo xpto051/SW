@@ -1,0 +1,41 @@
+.container .mat-form-field + .mat-form-field {
+  margin-left: 8px;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  margin-top: 50px;
+  align-items: center;
+}
+
+.mat-form-field {
+  min-width: 700px;
+}
+
+.mat-tab-group {
+  margin-top: 50px;
+  background-color: white;
+  padding: 60px;
+  border-radius: 2%;
+}
+
+.AddCompany {
+  border: 1px solid #eee;
+  background: linear-gradient(110deg, #2d3047, #5cc5b4);
+  width: 100%;
+  max-width: 300px;
+  height: 64px;
+  padding: 10px 15px;
+  margin-top: 2%;
+  border-radius: 5px;
+  color: white;
+}
+
+.AddCompany:hover {
+  background: darkseagreen;
+}
+
+table{
+  width: 100%;
+}

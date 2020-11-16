@@ -1,0 +1,6 @@
+Servidor de emails: node app (feito)
+
+Database: update-database (package manager console)
+
+Server: start without debug
+

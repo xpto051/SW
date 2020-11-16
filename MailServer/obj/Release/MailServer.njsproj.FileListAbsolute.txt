@@ -1,0 +1,1 @@
+C:\Users\roflb\source\repos\SW_1920\MailServer\bin\Microsoft.NodejsTools.WebRole.dll
