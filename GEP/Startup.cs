@@ -88,13 +88,13 @@ namespace GEP
                     ClockSkew = TimeSpan.Zero
                 };
             });
-
+            /*
             services.AddDataProtection()
                 .PersistKeysToGoogleCloudStorage(
                 Configuration["DataProtection:Bucket"],
                 Configuration["DataProtection:Object"])
                 .ProtectKeysWithGoogleKms(
-                Configuration["DataProtection:KmsKeyName"]);
+                Configuration["DataProtection:KmsKeyName"]); */
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

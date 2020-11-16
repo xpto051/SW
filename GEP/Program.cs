@@ -22,8 +22,8 @@ namespace GEP
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseContentRoot(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
-                    webBuilder.UseKestrel(options => options.ListenAnyIP(8080));
+                    //webBuilder.UseContentRoot(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
+                    //webBuilder.UseKestrel(options => options.ListenAnyIP(8080));
                     webBuilder.UseStartup<Startup>();
                 });
     }
