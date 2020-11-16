@@ -1,2 +1,3 @@
+service: mail-server
 runtime: nodejs
 env: flex

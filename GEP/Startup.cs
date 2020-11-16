@@ -21,7 +21,6 @@ using GEP.Models.Roles;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using GEP.Services;
-using Microsoft.AspNetCore.DataProtection;
 
 namespace GEP
 {
@@ -36,14 +35,13 @@ namespace GEP
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        [Obsolete]
         public void ConfigureServices(IServiceCollection services)
         {
             //Inject appsettings
             services.Configure<ApplicationSettings>(Configuration.GetSection("ApplicationSettings"));
 
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("CloudServer")));
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddIdentity<User, IdentityRole>(options => {
                 options.SignIn.RequireConfirmedEmail = true;
@@ -88,13 +86,6 @@ namespace GEP
                     ClockSkew = TimeSpan.Zero
                 };
             });
-
-            services.AddDataProtection()
-                .PersistKeysToGoogleCloudStorage(
-                Configuration["DataProtection:Bucket"],
-                Configuration["DataProtection:Object"])
-                .ProtectKeysWithGoogleKms(
-                Configuration["DataProtection:KmsKeyName"]);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -143,8 +134,10 @@ namespace GEP
 
                 spa.Options.SourcePath = "ClientApp";
 
+                if (env.IsDevelopment())
+                {
                     spa.UseAngularCliServer(npmScript: "start");
-                
+                }
             });
 
             CreateRoles(serviceProvider).Wait();

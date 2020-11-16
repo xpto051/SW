@@ -171,8 +171,6 @@ namespace GEP.Controllers
             }
 
             User userIdentity = _mapper.Map<User>(model);
-            userIdentity.EmailConfirmed = true;
-
             var result = await _userManager.CreateAsync(userIdentity, "12345678jJ");
             await _userManager.AddToRoleAsync(userIdentity, "Admin");
 

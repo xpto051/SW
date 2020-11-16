@@ -99,7 +99,6 @@ namespace GEP.Controllers
             }*/
         }
 
-
         [HttpGet]
         [Route("confirm")]
         public async Task<ActionResult> ConfirmEmail(string userId, string code)
